@@ -42,11 +42,24 @@ Para um mercado com odds decimais $O_1, \dots, O_k$:
   - Valor esperado: $E = pG - (1-p)V$
   - Desvio-padrão: $\sigma = \sqrt{p(G-E)^2 + (1-p)(-V-E)^2}$
 - Critério de Kelly: $f^* = \max\left(0,\; p - \frac{1-p}{O_i - 1}\right)$
-- Monte Carlo: 300 sequências de apostas independentes; em cada aposta, ganha com probabilidade $p$. Mostra média, melhor e pior trajetória e a proporção de trajetórias com lucro e com prejuízo.
+- Monte Carlo: 300 sequências de apostas independentes; em cada aposta, ganha com probabilidade $p$. Só se aposta quando a banca cobre o valor da aposta: se a banca fica menor que o valor da aposta, ela para ali. Mostra média, melhor e pior trajetória e a proporção de trajetórias com lucro, com prejuízo e que ficaram sem dinheiro para apostar.
+- O critério de Kelly aparece apenas como comparação, não como recomendação.
+
+## Entradas e validação
+
+- Números podem ser digitados com vírgula ou ponto (`2,10` ou `2.10`). Em valores em reais, `1.500` é lido como mil e quinhentos.
+- Banca maior que zero; aposta maior que zero e não maior que a banca; percentual entre 0 e 100; odds maiores que 1; número de apostas inteiro entre 5 e 150; probabilidade própria entre 0 e 99,9%.
+- Se as probabilidades implícitas somam menos de 100%, o simulador não calcula e avisa que provavelmente falta algum resultado do mercado (ou que alguma odd foi digitada errado), porque numa mesma casa essa soma sempre passa de 100%.
 
 ## Limitações conhecidas
 
 - A probabilidade sem margem é uma estimativa, não a chance verdadeira do evento.
 - As apostas simuladas são independentes e têm sempre as mesmas odds.
-- No modo "valor fixo", a simulação continua apostando mesmo quando a banca fica menor que o valor da aposta, então a banca pode ficar negativa.
+- A simulação usa 300 trajetórias: as porcentagens mudam um pouco a cada execução (o botão "Rodar novamente" mostra essa variação).
 - O plano gratuito do Typebot tem limite mensal de conversas, e o modelo de IA gratuito tem limite diário de requisições.
+
+## Verificação
+
+- As fórmulas exibidas foram conferidas contra um cálculo independente em 8 cenários (mercados de 2, 3 e 6 resultados, valor fixo, % da banca, probabilidade própria e mercado sem margem).
+- A simulação foi comparada com o cálculo exato (distribuição binomial e programação dinâmica com a regra de parar sem dinheiro) em centenas de milhares de trajetórias.
+- Acessibilidade verificada com axe-core (critérios WCAG 2.2 AA), nos temas claro e escuro, e layout testado em telas de 320 px a 1280 px.

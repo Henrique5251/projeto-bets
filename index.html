@@ -177,7 +177,9 @@
   .outcomes{ display:flex; flex-direction:column; gap:8px; margin-bottom:8px; }
   .outcome-row{ display:grid; grid-template-columns: 1fr 76px 32px; gap:7px; align-items:center; }
   .outcome-row input[type=text]{ font-size:14px; padding:8px; }
-  .outcome-row input[type=number]{ font-size:14px; text-align:right; padding:8px 6px; }
+  .outcome-row input.odd{ text-align:right; padding:8px 6px; }
+  .erro{ color: var(--loss); font-size:13px; font-weight:600; margin:6px 0 0; line-height:1.45; }
+  .erro[hidden]{ display:none; }
   .rm{
     width:32px; height:32px; border:none; background:transparent; color: var(--ink-soft); border-radius: 6px;
     cursor:pointer; font-size:20px; line-height:1; padding:0;
@@ -268,12 +270,14 @@
   .mc-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:4px; }
   .mc-controls{ display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; }
   .mc-controls .field{ margin-bottom:0; }
-  .mc-controls input[type=number]{ width:90px; text-align:right; }
+  .mc-controls input{ width:90px; text-align:right; }
+  .mc-controls .erro{ max-width: 220px; }
   .rerun-btn{
     padding: 10px 14px; min-height: 40px; border: 1px solid var(--ink); background: var(--ink); color: var(--invert-ink);
     border-radius:7px; font: inherit; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap;
   }
   .rerun-btn:hover{ opacity:.85; }
+  .rerun-btn:disabled{ opacity:.4; cursor:default; }
 
   .chart-wrap{ margin-top:16px; }
   .chart-wrap svg{ width:100%; height:auto; display:block; overflow:visible; }
@@ -285,8 +289,11 @@
   .chart-legend i.kelly{ border-top: 2px dashed var(--ink); }
   .chart-axes{ font-size: 12.5px; color: var(--ink-soft); margin: 6px 0 0; }
 
-  .mc-stats{ display:grid; grid-template-columns: repeat(5,1fr); gap:14px; margin-top:18px; padding-top:14px; border-top:1px solid var(--hair); }
-  @media (max-width:720px){ .mc-stats{ grid-template-columns: repeat(2,1fr); } }
+  .mc-stats{ display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin-top:18px; padding-top:14px; border-top:1px solid var(--hair); }
+  @media (max-width:560px){ .mc-stats{ grid-template-columns: repeat(2,1fr); } }
+  .mc-notes{ margin: 10px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink-soft); max-width: 70ch; }
+  .mc-notes:empty{ display:none; }
+  .mc-notes li{ margin-bottom: 3px; }
   .mc-stats .k{ font-size:12px; color: var(--ink-soft); font-weight:600; line-height:1.3; }
   .mc-stats .v{ font-size:17px; font-weight:600; margin-top:3px; font-family:'Newsreader',serif; }
   .mc-stats .v.profit{ color: var(--profit); }
@@ -353,7 +360,7 @@
     <h3 class="sr-only">Como usar</h3>
     <ol class="howto" style="margin-top:16px;">
       <li>Informe sua banca (o dinheiro disponível) e quanto apostaria em cada rodada.</li>
-      <li>Digite as odds de <strong>todos</strong> os resultados possíveis do jogo e escolha em qual você apostaria.</li>
+      <li>Digite as odds de <strong>todos</strong> os resultados possíveis do jogo (com vírgula ou ponto, como 2,10) e escolha em qual você apostaria.</li>
       <li>Veja o valor esperado, o risco e, na simulação, o que pode acontecer com a banca depois de várias apostas.</li>
     </ol>
 
@@ -373,7 +380,9 @@
         <dt>Simulação de Monte Carlo</dt>
         <dd>O computador sorteia centenas de sequências de apostas, respeitando a probabilidade usada, para mostrar a faixa de resultados possíveis.</dd>
         <dt>Critério de Kelly</dt>
-        <dd>Fórmula que calcula a fração da banca que faria a banca crescer mais rápido no longo prazo, <em>se</em> a probabilidade informada estivesse correta. Com a probabilidade tirada das próprias odds, o resultado é não apostar.</dd>
+        <dd>Fórmula que calcula a fração da banca que faria a banca crescer mais rápido no longo prazo, <em>se</em> a probabilidade informada estivesse correta. Com a probabilidade tirada das próprias odds, o resultado é não apostar. Aqui ele serve só para comparação: não é uma recomendação.</dd>
+        <dt>Ficar sem dinheiro para apostar</dt>
+        <dd>Na simulação, quando a banca fica menor que o valor da aposta, não é possível apostar de novo, e a banca para ali.</dd>
       </dl>
     </details>
 
@@ -384,7 +393,8 @@
           <h3>Sua banca</h3>
           <div class="field">
             <label for="banca">Banca atual (R$)</label>
-            <input type="number" inputmode="decimal" id="banca" value="1000" min="0" step="10">
+            <input type="text" inputmode="decimal" autocomplete="off" id="banca" value="1.000" aria-describedby="erro-banca">
+            <p class="erro" id="erro-banca" hidden></p>
           </div>
           <div class="field">
             <span class="label" id="lbl-modo">Como você quer apostar?</span>
@@ -395,11 +405,13 @@
           </div>
           <div class="field" id="campo-valor" style="margin-top:12px;">
             <label for="valorFixo">Valor da aposta (R$)</label>
-            <input type="number" inputmode="decimal" id="valorFixo" value="100" min="0" step="10">
+            <input type="text" inputmode="decimal" autocomplete="off" id="valorFixo" value="100" aria-describedby="erro-valor">
+            <p class="erro" id="erro-valor" hidden></p>
           </div>
           <div class="field" id="campo-pct" style="display:none; margin-top:12px;">
             <label for="valorPct">Percentual da banca (%)</label>
-            <input type="number" inputmode="decimal" id="valorPct" value="10" min="0" max="100" step="1">
+            <input type="text" inputmode="decimal" autocomplete="off" id="valorPct" value="10" aria-describedby="erro-pct">
+            <p class="erro" id="erro-pct" hidden></p>
           </div>
         </div>
 
@@ -408,6 +420,7 @@
           <p class="hint">Odds de todos os resultados possíveis, não só do que você quer apostar.</p>
           <div class="outcome-head" aria-hidden="true"><span>Resultado</span><span>Odd</span><span></span></div>
           <div id="outcomes" class="outcomes"></div>
+          <p class="erro" id="erro-mercado" hidden></p>
           <button type="button" class="add-outcome" id="addOutcome">+ adicionar resultado</button>
 
           <fieldset class="pick">
@@ -425,10 +438,11 @@
                 <label for="useOwnP">Tenho uma razão concreta para achar que minha probabilidade é diferente da odd</label>
               </div>
               <div class="field" id="campo-ownP" style="display:none">
-                <label for="ownP">Sua probabilidade estimada (%)</label>
-                <input type="number" inputmode="decimal" id="ownP" min="0" max="100" step="0.5" value="44.4">
+                <label for="ownP" id="lbl-ownp">Sua probabilidade estimada (%)</label>
+                <input type="text" inputmode="decimal" autocomplete="off" id="ownP" value="44,4" aria-describedby="erro-ownp">
+                <p class="erro" id="erro-ownp" hidden></p>
               </div>
-              <p class="note">Por padrão, usamos a probabilidade implícita nas odds (sem a margem da casa). Isso faz o Kelly sempre recomendar não apostar. Só muda se você informar uma probabilidade própria, com razão real para isso.</p>
+              <p class="note">Por padrão, usamos a probabilidade implícita nas odds (sem a margem da casa). Com ela, o critério de Kelly sempre indica não apostar. Isso só muda se você informar uma probabilidade própria, e só faria sentido com uma razão concreta para isso.</p>
             </div>
           </details>
         </div>
@@ -440,14 +454,14 @@
 
         <div class="block" id="resultsCard"></div>
 
-        <div class="block">
+        <div class="block" id="blocoKelly">
           <h3 id="t-kelly">Sua aposta vs. Critério de Kelly</h3>
           <div class="table-scroll" role="region" aria-labelledby="t-kelly" tabindex="0">
             <table class="compare" id="compareTable"></table>
           </div>
         </div>
 
-        <div class="block">
+        <div class="block" id="blocoMC">
           <div class="mc-head">
             <div>
               <h3 id="t-mc">Simulação de Monte Carlo</h3>
@@ -456,23 +470,27 @@
             <div class="mc-controls">
               <div class="field">
                 <label for="nApostas">Nº de apostas (5 a 150)</label>
-                <input type="number" inputmode="numeric" id="nApostas" value="30" min="5" max="150" step="1">
+                <input type="text" inputmode="numeric" autocomplete="off" id="nApostas" value="30" aria-describedby="erro-n">
+                <p class="erro" id="erro-n" hidden></p>
               </div>
               <button type="button" class="rerun-btn" id="rerunMC">Rodar novamente</button>
             </div>
           </div>
+          <div id="mcCorpo">
           <div class="chart-wrap" id="mcChartWrap"></div>
           <div class="chart-legend">
             <span><i class="base"></i> Banca inicial</span>
-            <span><i class="band"></i> Faixa entre a melhor e a pior trajetória (sua aposta)</span>
+            <span><i class="band"></i> Faixa entre o menor e o maior valor simulado a cada aposta (sua aposta)</span>
             <span><i></i> Banca média: sua aposta</span>
             <span><i class="kelly"></i> Banca média: se seguisse o Critério de Kelly</span>
           </div>
           <p class="chart-axes">Eixo vertical: banca em reais (k = mil). Eixo horizontal: número de apostas.</p>
           <div class="mc-stats" id="mcStats"></div>
+          <ul class="mc-notes" id="mcNotes"></ul>
           <p class="hint" style="margin:16px 0 6px;">Depois de <span id="mcNLabel">30</span> apostas seguidas, nessas mesmas condições:</p>
           <div class="table-scroll" role="region" aria-labelledby="t-mc" tabindex="0">
             <table class="compare" id="mcCompareTable"></table>
+          </div>
           </div>
         </div>
 
@@ -546,20 +564,26 @@
 
 <!-- =========================================================
      SIMULADOR
-     A matemática (computeModel, runSimulations, summarize) é a
-     mesma da calculadora original. As mudanças são de
-     apresentação e acessibilidade.
+     As fórmulas (probabilidade implícita, margem da casa, valor
+     esperado, desvio-padrão, critério de Kelly e Monte Carlo) são
+     as da calculadora original. Mudanças desta versão:
+     - números podem ser digitados com vírgula ou ponto;
+     - cada campo é validado e mostra o que corrigir;
+     - se as probabilidades implícitas somam menos de 100%, o
+       simulador avisa que falta resultado no mercado;
+     - na simulação, só se aposta quando há dinheiro suficiente.
      ========================================================= -->
 <script>
 (function(){
   const state = {
     stakeMode: 'valor',
     outcomes: [
-      { label: 'Vitória do time da casa', odd: 2.10 },
-      { label: 'Empate', odd: 3.30 },
-      { label: 'Vitória do time visitante', odd: 3.40 },
+      { label: 'Vitória do time da casa', odd: 2.10, texto: '2,10' },
+      { label: 'Empate', odd: 3.30, texto: '3,30' },
+      { label: 'Vitória do time visitante', odd: 3.40, texto: '3,40' },
     ],
-    picked: 0
+    picked: 0,
+    ownPEditado: false   // a pessoa já digitou uma probabilidade própria?
   };
 
   const $ = sel => document.querySelector(sel);
@@ -573,17 +597,43 @@
     return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
 
+  // ---------- Leitura de números ----------
+  // Aceita o jeito brasileiro (2,50 · 1.500 · 1.500,50) e o internacional (2.50).
+  // tipo 'dinheiro': ponto seguido de grupos de 3 dígitos é separador de milhar (1.500 = mil e quinhentos).
+  // demais tipos (odd, percentual, inteiro): ponto ou vírgula são casas decimais.
+  function lerNumero(texto, tipo){
+    let s = String(texto == null ? '' : texto).trim().replace(/R\$|%|\s/g, '');
+    if(s === '' || !/^[-+]?[\d.,]+$/.test(s)) return NaN;
+    const temPonto = s.includes('.'), temVirgula = s.includes(',');
+    if(temPonto && temVirgula){
+      // o último separador é o decimal; o outro é de milhar
+      if(s.lastIndexOf(',') > s.lastIndexOf('.')) s = s.replace(/\./g, '').replace(',', '.');
+      else s = s.replace(/,/g, '');
+    } else if(temVirgula){
+      if((s.match(/,/g) || []).length > 1) return NaN;
+      s = s.replace(',', '.');
+    } else if(temPonto && tipo === 'dinheiro' && /^[-+]?\d{1,3}(\.\d{3})+$/.test(s)){
+      s = s.replace(/\./g, '');
+    }
+    if((s.match(/\./g) || []).length > 1) return NaN;
+    const v = Number(s);
+    return isFinite(v) ? v : NaN;
+  }
+
+  function fmtNum(v, casas){
+    return v.toLocaleString('pt-BR', {minimumFractionDigits:casas, maximumFractionDigits:casas});
+  }
   // Valores negativos aparecem com sinal de menos (ex.: −R$ 4,59),
   // que leitores de tela anunciam como "menos".
   function fmtMoney(v){
     if(!isFinite(v)) return '—';
-    const av = Math.abs(v).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+    const av = fmtNum(Math.abs(v), 2);
     return v < 0 ? ('−R$ ' + av) : ('R$ ' + av);
   }
   function fmtPct(v, digits){
     if(!isFinite(v)) return '—';
     const d = digits==null?1:digits;
-    const av = (Math.abs(v)*100).toLocaleString('pt-BR', {minimumFractionDigits:d, maximumFractionDigits:d});
+    const av = fmtNum(Math.abs(v)*100, d);
     return v < 0 ? ('−' + av + '%') : (av + '%');
   }
   function signClass(v, eps){
@@ -591,6 +641,13 @@
     if(v > eps) return 'profit';
     if(v < -eps) return 'loss';
     return '';
+  }
+
+  // Mostra ou limpa a mensagem de erro de um campo.
+  function marcarErro(inputSel, erroId, msg){
+    const inp = $(inputSel), p = document.getElementById(erroId);
+    if(msg){ inp.setAttribute('aria-invalid', 'true'); p.textContent = msg; p.hidden = false; }
+    else { inp.removeAttribute('aria-invalid'); p.textContent = ''; p.hidden = true; }
   }
 
   // Resumo para leitores de tela, anunciado depois que a pessoa para de digitar.
@@ -605,12 +662,11 @@
   function renderOutcomes(){
     outcomesEl.innerHTML = '';
     state.outcomes.forEach((o, i) => {
-      const oddOk = isFinite(o.odd) && o.odd > 1;
       const row = document.createElement('div');
       row.className = 'outcome-row';
       row.innerHTML = `
         <input type="text" data-idx="${i}" data-field="label" value="${esc(o.label)}" placeholder="Nome do resultado" aria-label="Nome do resultado ${i+1}">
-        <input type="number" inputmode="decimal" data-idx="${i}" data-field="odd" value="${isFinite(o.odd) ? o.odd : ''}" min="1.01" step="0.01" placeholder="Odd" aria-label="Odd do resultado ${i+1}"${oddOk ? '' : ' aria-invalid="true"'}>
+        <input type="text" class="odd" inputmode="decimal" autocomplete="off" data-idx="${i}" data-field="odd" value="${esc(o.texto)}" placeholder="Odd" aria-label="Odd do resultado ${i+1}" aria-describedby="erro-mercado">
         <button type="button" class="rm" data-idx="${i}" title="Remover" aria-label="Remover resultado ${i+1}" ${state.outcomes.length<=2?'disabled':''}>×</button>
       `;
       outcomesEl.appendChild(row);
@@ -619,14 +675,14 @@
     outcomesEl.querySelectorAll('input').forEach(inp => {
       inp.addEventListener('input', e => {
         const idx = +e.target.dataset.idx;
-        const field = e.target.dataset.field;
-        state.outcomes[idx][field] = field === 'odd' ? parseFloat(e.target.value) : e.target.value;
-        if(field === 'odd'){
-          const v = state.outcomes[idx].odd;
-          if(isFinite(v) && v > 1) e.target.removeAttribute('aria-invalid');
-          else e.target.setAttribute('aria-invalid', 'true');
+        const o = state.outcomes[idx];
+        if(e.target.dataset.field === 'odd'){
+          o.texto = e.target.value;
+          o.odd = lerNumero(e.target.value, 'odd');
+        } else {
+          o.label = e.target.value;
+          renderPicker();
         }
-        if(field === 'label'){ renderPicker(); }
         recalc();
       });
     });
@@ -657,7 +713,7 @@
 
   $('#addOutcome').addEventListener('click', () => {
     if(state.outcomes.length >= 6) return;
-    state.outcomes.push({ label: 'Resultado ' + (state.outcomes.length+1), odd: 2.00 });
+    state.outcomes.push({ label: 'Resultado ' + (state.outcomes.length+1), odd: 2.00, texto: '2,00' });
     renderOutcomes(); renderPicker(); recalc();
     const rows = outcomesEl.querySelectorAll('.outcome-row');
     rows[rows.length-1].querySelector('input[type=text]').focus();
@@ -681,9 +737,10 @@
 
   $('#useOwnP').addEventListener('change', e => {
     $('#campo-ownP').style.display = e.target.checked ? '' : 'none';
+    state.ownPEditado = false;   // começa igual à probabilidade do mercado, sem arredondar
     recalc();
   });
-  $('#ownP').addEventListener('input', recalc);
+  $('#ownP').addEventListener('input', () => { state.ownPEditado = true; recalc(); });
   $('#rerunMC').addEventListener('click', () => {
     if(!lastModel) return;
     renderMonteCarlo(lastModel);
@@ -693,14 +750,71 @@
   let lastModel = null;
   let lastSim = null;
 
-  // ---------- Modelo (idêntico ao original) ----------
-  function computeModel(){
-    const banca = parseFloat($('#banca').value) || 0;
-    const odds = state.outcomes.map(o => o.odd);
-    const validOdds = odds.every(o => isFinite(o) && o > 1);
-    if(!validOdds || state.outcomes.length < 2){
-      return { valid: false };
+  // ---------- Leitura e validação das entradas ----------
+  function lerEntradas(){
+    // banca
+    const banca = lerNumero($('#banca').value, 'dinheiro');
+    const eBanca = banca > 0 ? null : 'Informe uma banca maior que zero (exemplo: 1.000).';
+    marcarErro('#banca', 'erro-banca', eBanca);
+
+    // valor da aposta
+    let V = NaN, pctValue = 0, eAposta = null;
+    if(state.stakeMode === 'valor'){
+      V = lerNumero($('#valorFixo').value, 'dinheiro');
+      if(!(V > 0)) eAposta = 'Informe um valor maior que zero (exemplo: 100).';
+      else if(banca > 0 && V > banca) eAposta = `A aposta não pode ser maior que a banca (${fmtMoney(banca)}).`;
+      marcarErro('#valorFixo', 'erro-valor', eAposta);
+      marcarErro('#valorPct', 'erro-pct', null);
+    } else {
+      pctValue = lerNumero($('#valorPct').value, 'pct');
+      if(!(pctValue > 0 && pctValue <= 100)) eAposta = 'Use um percentual maior que 0 e até 100 (exemplo: 10).';
+      else V = banca * (pctValue/100);
+      marcarErro('#valorPct', 'erro-pct', eAposta);
+      marcarErro('#valorFixo', 'erro-valor', null);
     }
+
+    // odds do mercado
+    const odds = state.outcomes.map(o => o.odd);
+    const ruins = [];
+    outcomesEl.querySelectorAll('input.odd').forEach((inp, i) => {
+      if(isFinite(odds[i]) && odds[i] > 1) inp.removeAttribute('aria-invalid');
+      else { inp.setAttribute('aria-invalid', 'true'); ruins.push(i+1); }
+    });
+    let eMercado = null, incompleto = false;
+    if(ruins.length){
+      eMercado = (ruins.length === 1 ? `A odd do resultado ${ruins[0]} precisa` : `As odds dos resultados ${ruins.join(', ')} precisam`)
+        + ' ser um número maior que 1 (exemplo: 2,10).';
+    } else {
+      const S = odds.reduce((a, o) => a + 1/o, 0);
+      if(S < 1 - 1e-9){
+        incompleto = true;
+        eMercado = `As probabilidades implícitas somam ${fmtPct(S)}, menos que 100%. Numa mesma casa de apostas essa soma sempre passa de 100% (a diferença é a margem da casa). Confira se falta algum resultado, como o empate, ou se alguma odd foi digitada errado.`;
+      }
+    }
+    const pm = $('#erro-mercado'); pm.textContent = eMercado || ''; pm.hidden = !eMercado;
+
+    // número de apostas da simulação
+    const nApostas = lerNumero($('#nApostas').value, 'inteiro');
+    const eN = (Number.isInteger(nApostas) && nApostas >= 5 && nApostas <= 150) ? null : 'Use um número inteiro entre 5 e 150.';
+    marcarErro('#nApostas', 'erro-n', eN);
+
+    // probabilidade própria (só é lida depois que a pessoa digita)
+    const useOwn = $('#useOwnP').checked;
+    let ownP = NaN, eOwn = null;
+    if(useOwn && state.ownPEditado){
+      ownP = lerNumero($('#ownP').value, 'pct');
+      if(!(ownP >= 0 && ownP <= 99.9)) eOwn = 'Use um valor entre 0 e 99,9.';
+    }
+    marcarErro('#ownP', 'erro-ownp', eOwn);
+
+    const ok = !eBanca && !eAposta && !eMercado && !eN && !eOwn;
+    return { ok, incompleto, banca, V, pctValue, odds, nApostas, useOwn, ownP };
+  }
+
+  // ---------- Modelo (fórmulas da calculadora original) ----------
+  function computeModel(e){
+    const banca = e.banca;
+    const odds = e.odds;
     const implied = odds.map(o => 1/o);
     const S = implied.reduce((a,b) => a+b, 0);
     const margin = S - 1;
@@ -710,19 +824,14 @@
     const O = odds[i];
     const pMarket = pFair[i];
 
-    const useOwn = $('#useOwnP').checked;
-    if(!useOwn){
-      $('#ownP').value = (pMarket*100).toFixed(1);
+    const useOwn = e.useOwn;
+    const usaPropria = useOwn && state.ownPEditado;
+    if(!usaPropria){
+      $('#ownP').value = fmtNum(pMarket*100, 1);
     }
-    const p = useOwn ? Math.min(0.999, Math.max(0, (parseFloat($('#ownP').value) || 0)/100)) : pMarket;
+    const p = usaPropria ? e.ownP/100 : pMarket;
 
-    let V;
-    if(state.stakeMode === 'valor'){
-      V = parseFloat($('#valorFixo').value) || 0;
-    } else {
-      const pct = parseFloat($('#valorPct').value) || 0;
-      V = banca * (pct/100);
-    }
+    const V = e.V;
 
     function statsFor(stake){
       const G = stake * (O - 1);
@@ -739,45 +848,82 @@
     const kellyStake = kellyF * banca;
     const kellyStats = statsFor(kellyStake);
 
-    let nApostas = parseInt($('#nApostas').value);
-    if(!isFinite(nApostas)) nApostas = 30;
-    nApostas = Math.min(150, Math.max(5, nApostas));
-
     return {
-      valid: true, banca, margin, S, p, pMarket, useOwn, O, V, nApostas,
+      valid: true, banca, margin, S, p, pMarket, useOwn, O, V, nApostas: e.nApostas,
       stakeMode: state.stakeMode,
-      pctValue: parseFloat($('#valorPct').value) || 0,
+      pctValue: e.pctValue,
       user: userStats, kellyF, kelly: kellyStats,
       outcomeLabel: state.outcomes[i].label || ('Resultado ' + (i+1)),
       nOutcomes: state.outcomes.length
     };
   }
 
+  function limparResultados(msg){
+    resultsCard.innerHTML = `<div class="empty" role="status">${msg}</div>`;
+    compareTable.innerHTML = '';
+    $('#mcChartWrap').innerHTML = '';
+    $('#mcStats').innerHTML = '';
+    $('#mcNotes').innerHTML = '';
+    $('#mcCompareTable').innerHTML = '';
+    lastModel = null;
+    lastSim = null;
+    $('#blocoKelly').hidden = true;
+    $('#mcCorpo').hidden = true;
+  }
+
   function recalc(){
-    const m = computeModel();
-    if(!m.valid){
-      resultsCard.innerHTML = '<div class="empty" role="alert">Preencha odds válidas (maiores que 1) para todos os resultados do mercado.</div>';
-      compareTable.innerHTML = '';
-      $('#mcChartWrap').innerHTML = '';
-      $('#mcStats').innerHTML = '';
-      $('#mcCompareTable').innerHTML = '';
-      lastModel = null;
-      lastSim = null;
+    const pick = state.outcomes[state.picked];
+    $('#lbl-ownp').textContent = `Sua probabilidade estimada para "${(pick && pick.label) || ('Resultado ' + (state.picked+1))}" (%)`;
+
+    const e = lerEntradas();
+    if(!e.ok){
+      $('#rerunMC').disabled = true;
+      limparResultados(e.incompleto
+        ? 'Confira as odds do mercado: veja o aviso no quadro "O mercado".'
+        : 'Corrija os campos destacados em vermelho para ver os resultados.');
       return;
     }
+    const m = computeModel(e);
     lastModel = m;
+    $('#blocoKelly').hidden = false;
+    $('#mcCorpo').hidden = false;
+    $('#rerunMC').disabled = false;
 
     const evSign = signClass(m.user.EV, 0.005*Math.max(m.user.stake,1));
     const pillLabel = evSign === 'profit' ? 'Favorável' : (evSign === 'loss' ? 'Desfavorável' : 'Neutra');
+    const pillTexto = m.useOwn && state.ownPEditado ? pillLabel + ' pela sua probabilidade' : pillLabel;
+
+    let kellyBox;
+    if(m.kellyF === 0){
+      const motivo = m.useOwn && state.ownPEditado
+        ? `Com ${fmtPct(m.p)} de probabilidade própria, a aposta continua abaixo do ponto de equilíbrio da odd (${fmtPct(1/m.O)}).`
+        : (m.margin > 1e-9
+            ? 'O valor esperado é negativo em qualquer resultado deste mercado: é a margem da casa, distribuída matematicamente.'
+            : 'Neste mercado não há margem da casa: o valor esperado é zero, então não há vantagem em apostar.');
+      kellyBox = `<div class="callout loss"><span class="lead">Pelo critério de Kelly: não apostar.</span><p>${motivo}</p></div>`;
+    } else {
+      kellyBox = `<div class="callout"><span class="lead">Pelo critério de Kelly, a fração seria ${fmtPct(m.kellyF)} da banca (${fmtMoney(m.kelly.stake)}).</span>
+        <p>Isso só valeria se a sua probabilidade (${fmtPct(m.p)}) estivesse certa: ela supera o ponto de equilíbrio da odd (${fmtPct(1/m.O)}). Na prática, ninguém conhece a probabilidade real com essa precisão, e as odds são definidas para dar vantagem à casa.</p></div>`;
+    }
+
+    const explicacao = (m.useOwn && state.ownPEditado)
+      ? `<details class="more">
+           <summary>por que o valor esperado muda ao trocar de resultado</summary>
+           <p>A probabilidade própria que você informou vale para o resultado escolhido. Ao trocar de resultado, a mesma probabilidade passa a ser comparada com outra odd, e o valor esperado muda. Ajuste o valor em "Avançado" para o novo resultado.</p>
+         </details>`
+      : `<details class="more">
+           <summary>por que trocar de resultado não muda o valor esperado</summary>
+           <p>Dentro do mesmo mercado, probabilidade × odd é sempre a mesma constante para qualquer resultado, então o valor esperado é idêntico entre os ${m.nOutcomes} resultados. O que muda é o <strong>risco</strong>: resultados com odd mais alta (menos prováveis) têm desvio-padrão maior, para o mesmo valor esperado. Troque de resultado e observe o "Risco" mudar, com o valor esperado parado.</p>
+         </details>`;
 
     resultsCard.innerHTML = `
       <h3>O que isso significa</h3>
-      <p class="hint">Aposta em "<strong>${esc(m.outcomeLabel)}</strong>", odd ${m.O.toFixed(2)}, stake de ${fmtMoney(m.user.stake)}.</p>
+      <p class="hint">Aposta em "<strong>${esc(m.outcomeLabel)}</strong>", odd ${fmtNum(m.O, 2)}, aposta de ${fmtMoney(m.user.stake)}.</p>
 
       <div class="hero-number">
         <div class="k">Valor esperado desta aposta</div>
         <div class="v ${evSign}">${fmtMoney(m.user.EV)}</div>
-        <div class="pill ${evSign}">${pillLabel}</div>
+        <div class="pill ${evSign}">${pillTexto}</div>
         <div class="hero-sub">Média teórica se essa aposta fosse repetida muitas vezes. Não é uma previsão do resultado desta aposta específica.</div>
       </div>
 
@@ -797,28 +943,12 @@
         </div>
       </div>
 
-      ${ m.kellyF === 0
-        ? `<div class="callout loss">
-             <span class="lead">Kelly recomenda não apostar.</span>
-             <p>${ m.useOwn
-                ? `Mesmo com ${fmtPct(m.p)} de probabilidade própria, ainda abaixo do ponto de equilíbrio (${fmtPct(1/m.O)}).`
-                : `Valor esperado negativo em qualquer resultado deste mercado: é a margem da casa, distribuída matematicamente. Para o Kelly recomendar algo, informe uma probabilidade própria em "Avançado".`
-             }</p>
-           </div>`
-        : `<div class="callout profit">
-             <span class="lead">Kelly recomenda apostar ${fmtPct(m.kellyF)} da banca</span>
-             <p>${fmtMoney(m.kelly.stake)} neste resultado: a probabilidade usada (${fmtPct(m.p)}) supera o ponto de equilíbrio da odd (${fmtPct(1/m.O)}).</p>
-           </div>`
-      }
-
-      <details class="more">
-        <summary>por que trocar de resultado não muda o valor esperado</summary>
-        <p>Dentro do mesmo mercado, probabilidade × odd é sempre a mesma constante para qualquer resultado, então o valor esperado é idêntico entre os ${m.nOutcomes} resultados. O que muda é o <strong>risco</strong>: resultados com odd mais alta (menos prováveis) têm desvio-padrão maior, para o mesmo valor esperado. Troque de resultado e observe o "Risco" mudar, com o valor esperado parado.</p>
-      </details>
+      ${kellyBox}
+      ${explicacao}
     `;
 
     compareTable.innerHTML = `
-      <caption class="sr-only">Comparação entre a sua aposta e a recomendação do Critério de Kelly</caption>
+      <caption class="sr-only">Comparação entre a sua aposta e o critério de Kelly</caption>
       <thead>
         <tr><th scope="col">Cenário</th><th scope="col">Aposta</th><th scope="col">Valor esperado</th><th scope="col">Risco (<abbr title="desvio-padrão">σ</abbr>)</th></tr>
       </thead>
@@ -830,7 +960,7 @@
           <td>${fmtMoney(m.user.sd)}</td>
         </tr>
         <tr>
-          <th scope="row">Recomendação de Kelly</th>
+          <th scope="row">Critério de Kelly</th>
           <td>${fmtMoney(m.kelly.stake)}</td>
           <td class="${signClass(m.kelly.EV)}">${fmtMoney(m.kelly.EV)}</td>
           <td>${fmtMoney(m.kelly.sd)}</td>
@@ -840,12 +970,14 @@
 
     renderMonteCarlo(m);
 
-    anunciar(`Resultado atualizado. Valor esperado desta aposta: ${fmtMoney(m.user.EV)}, ${pillLabel.toLowerCase()}. Probabilidade usada: ${fmtPct(m.p)}. Margem da casa: ${fmtPct(m.margin)}. Na simulação, banca média final: ${fmtMoney(lastSim.su.meanFinal)}.`);
+    anunciar(`Resultado atualizado. Valor esperado desta aposta: ${fmtMoney(m.user.EV)}, ${pillTexto.toLowerCase()}. Probabilidade usada: ${fmtPct(m.p)}. Margem da casa: ${fmtPct(m.margin)}. Na simulação, banca média final: ${fmtMoney(lastSim.su.meanFinal)}.`);
   }
 
-  // ---------- Monte Carlo (idêntico ao original) ----------
-  // Roda "sua aposta" e "se seguisse Kelly" lado a lado, usando o MESMO
+  // ---------- Monte Carlo ----------
+  // Roda "sua aposta" e "critério de Kelly" lado a lado, usando o MESMO
   // sorteio de vitória/derrota em cada passo, para a comparação ser justa.
+  // Regra da banca: só se aposta quando há dinheiro suficiente para a aposta.
+  // Se a banca fica menor que o valor da aposta, ela para ali.
   function runSimulations(m){
     const M = 300;
     const n = m.nApostas;
@@ -862,8 +994,10 @@
         const win = Math.random() < m.p;
 
         const stakeUser = m.stakeMode === 'valor' ? m.V : bankUser * (m.pctValue/100);
-        const resultUser = win ? stakeUser * (m.O - 1) : -stakeUser;
-        bankUser = bankUser + resultUser;
+        if(stakeUser <= bankUser + 1e-6){
+          const resultUser = win ? stakeUser * (m.O - 1) : -stakeUser;
+          bankUser = bankUser + resultUser;
+        }
         userTraj[j] = bankUser;
 
         const stakeKelly = m.kellyF * bankKelly;
@@ -877,6 +1011,8 @@
     return { userTrajs, kellyTrajs };
   }
 
+  // Lucro e prejuízo usam uma pequena tolerância para que arredondamentos
+  // de ponto flutuante não transformem um empate em lucro ou prejuízo.
   function summarize(trajs, n, banca0){
     const M = trajs.length;
     const meanT = new Array(n+1).fill(0);
@@ -896,9 +1032,17 @@
     const meanFinal = finals.reduce((a,b)=>a+b,0) / M;
     const maxFinal = Math.max(...finals);
     const minFinal = Math.min(...finals);
-    const probLucro = finals.filter(v => v > banca0).length / M;
-    const probPrejuizo = finals.filter(v => v < banca0).length / M;
+    const probLucro = finals.filter(v => v > banca0 + 1e-6).length / M;
+    const probPrejuizo = finals.filter(v => v < banca0 - 1e-6).length / M;
     return { meanT, minT, maxT, meanFinal, maxFinal, minFinal, probLucro, probPrejuizo };
+  }
+
+  // "Sem dinheiro para apostar": no valor fixo, terminou com menos que o valor da aposta;
+  // no % da banca, chegou a zero (só acontece apostando 100%).
+  function probSemDinheiro(trajs, m){
+    const n = m.nApostas;
+    const limite = m.stakeMode === 'valor' ? m.V : 0.01;
+    return trajs.filter(t => t[n] < limite - 1e-6).length / trajs.length;
   }
 
   function renderMonteCarlo(m){
@@ -907,7 +1051,8 @@
 
     const su = summarize(userTrajs, n, m.banca);
     const sk = summarize(kellyTrajs, n, m.banca);
-    lastSim = { m, userTrajs, su, sk };
+    const semDinheiro = probSemDinheiro(userTrajs, m);
+    lastSim = { m, userTrajs, su, sk, semDinheiro };
 
     $('#mcNLabel').textContent = n;
     drawChart();
@@ -918,12 +1063,20 @@
       <div class="stat"><div class="k">Pior trajetória</div><div class="v loss">${fmtMoney(su.minFinal)}</div></div>
       <div class="stat"><div class="k">Probabilidade de lucro</div><div class="v profit">${fmtPct(su.probLucro,0)}</div></div>
       <div class="stat"><div class="k">Probabilidade de prejuízo</div><div class="v loss">${fmtPct(su.probPrejuizo,0)}</div></div>
+      <div class="stat"><div class="k">Ficou sem dinheiro para apostar</div><div class="v loss">${fmtPct(semDinheiro,0)}</div></div>
     `;
+
+    const notas = [];
+    const empate = Math.max(0, 1 - su.probLucro - su.probPrejuizo);
+    if(empate > 1e-9) notas.push(`${fmtPct(empate,0)} das trajetórias terminaram exatamente com a banca inicial (nem lucro, nem prejuízo).`);
+    if(m.stakeMode === 'valor') notas.push(`Quando a banca fica menor que ${fmtMoney(m.V)}, não é possível fazer a próxima aposta e a simulação para de apostar.`);
+    else notas.push('No modo % da banca, a aposta encolhe junto com a banca: ela fica cada vez menor, mas só chega a zero apostando 100%.');
+    $('#mcNotes').innerHTML = notas.map(t => `<li>${t}</li>`).join('');
 
     const rowClassUser = signClass(su.meanFinal - m.banca);
     const rowClassKelly = signClass(sk.meanFinal - m.banca);
     $('#mcCompareTable').innerHTML = `
-      <caption class="sr-only">Resultado da simulação depois de ${n} apostas: sua aposta comparada ao Critério de Kelly</caption>
+      <caption class="sr-only">Resultado da simulação depois de ${n} apostas: sua aposta comparada ao critério de Kelly</caption>
       <thead>
         <tr><th scope="col">Estratégia</th><th scope="col">Banca média final</th><th scope="col">Melhor caso</th><th scope="col">Pior caso</th><th scope="col">Prob. de lucro</th></tr>
       </thead>
@@ -936,7 +1089,7 @@
           <td>${fmtPct(su.probLucro,0)}</td>
         </tr>
         <tr>
-          <th scope="row">Se seguisse Kelly ${m.kellyF===0 ? '(não apostar)' : '('+fmtPct(m.kellyF)+' da banca)'}</th>
+          <th scope="row">Critério de Kelly ${m.kellyF===0 ? '(não apostar)' : '('+fmtPct(m.kellyF)+' da banca)'}</th>
           <td class="${rowClassKelly}">${fmtMoney(sk.meanFinal)}</td>
           <td>${fmtMoney(sk.maxFinal)}</td>
           <td>${fmtMoney(sk.minFinal)}</td>
@@ -1040,6 +1193,9 @@
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(drawChart, 150);
   });
+
+  // Expõe as funções puras para testes automatizados (não afeta o uso normal).
+  window.__simulador = { lerNumero, runSimulations, summarize, probSemDinheiro };
 
   renderOutcomes();
   renderPicker();
