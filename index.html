@@ -263,16 +263,6 @@
   .radiogroup label.opt:has(input:checked){ color: var(--tinta); font-weight: 700; }
   .radiogroup input{ accent-color: var(--feltro); width: 20px; height: 20px; flex: none; margin: 0; }
 
-  .advanced summary{ cursor:pointer; font-weight: 700; min-height: 32px; display:flex; align-items:center; gap: 8px; list-style: none; }
-  .advanced summary::-webkit-details-marker{ display:none; }
-  .advanced summary::before{ content: '+'; font-family: var(--display); font-size: 24px; line-height: 1; width: 14px; color: var(--feltro); }
-  .advanced[open] summary::before{ content: '–'; }
-  .advanced .body{ margin-top: 14px; }
-  .checkline{ display:flex; align-items:flex-start; gap: 10px; margin-bottom: 12px; }
-  .checkline input{ margin-top: 3px; accent-color: var(--feltro); width: 20px; height: 20px; flex: none; }
-  .checkline label{ margin:0; font-weight: 400; font-size: 16px; line-height: 1.4; }
-  .advanced .note{ font-size: 16px; color: var(--tinta-2); margin: 10px 0 0; }
-
   /* resultado principal: a conta desta aposta */
   #resultsCard{
     --dente: 14px;
@@ -514,7 +504,9 @@
             <dt>Odd</dt>
             <dd>Quanto a casa devolve para cada R$ 1 apostado se você acertar, já incluindo o próprio R$ 1. Com odd 2,50, uma aposta de R$ 10 devolve R$ 25 (lucro de R$ 15).</dd>
             <dt>Probabilidade implícita</dt>
-            <dd>É 1 dividido pela odd. Somando as probabilidades implícitas de todos os resultados, o total passa de 100%. O simulador divide cada uma por essa soma para estimar a probabilidade sem a margem da casa.</dd>
+            <dd>É 1 dividido pela odd. Somando as probabilidades implícitas de todos os resultados, o total passa de 100%. O simulador divide cada uma por essa soma para tirar a margem da casa.</dd>
+            <dt>Probabilidade usada</dt>
+            <dd>A probabilidade implícita sem a margem da casa. O simulador parte da premissa de que a casa, com mais dados e especialistas que um apostador comum, estima melhor as chances; por isso, essa é tratada como a melhor aproximação da chance real do evento.</dd>
             <dt>Margem da casa</dt>
             <dd>Quanto essa soma passa de 100%. É a vantagem da casa embutida nas odds.</dd>
             <dt>Valor esperado</dt>
@@ -524,7 +516,7 @@
             <dt>Simulação de Monte Carlo</dt>
             <dd>O computador sorteia centenas de sequências de apostas, respeitando a probabilidade usada, para mostrar a faixa de resultados possíveis.</dd>
             <dt>Critério de Kelly</dt>
-            <dd>Fórmula que calcula a fração da banca que faria a banca crescer mais rápido no longo prazo, <em>se</em> a probabilidade informada estivesse correta. Com a probabilidade tirada das próprias odds, o resultado é não apostar. Aqui ele serve só para comparação: não é uma recomendação.</dd>
+            <dd>Fórmula que calcula a fração da banca que faria a banca crescer mais rápido no longo prazo, <em>se</em> a probabilidade usada estivesse correta. Como o simulador usa a probabilidade das próprias odds, sem a margem, o resultado é sempre não apostar. Aqui ele serve só para comparação: não é uma recomendação.</dd>
             <dt>Ficar sem dinheiro para apostar</dt>
             <dd>Na simulação, quando a banca fica menor que o valor da aposta, não é possível apostar de novo, e a banca para ali.</dd>
           </dl>
@@ -574,23 +566,6 @@
             </fieldset>
           </div>
 
-          <div class="input-card">
-            <details class="advanced" id="advancedBox">
-              <summary>Avançado: usar minha própria probabilidade</summary>
-              <div class="body">
-                <div class="checkline">
-                  <input type="checkbox" id="useOwnP">
-                  <label for="useOwnP">Tenho uma razão concreta para achar que minha probabilidade é diferente da odd</label>
-                </div>
-                <div class="field" id="campo-ownP" style="display:none">
-                  <label for="ownP" id="lbl-ownp">Sua probabilidade estimada (%)</label>
-                  <input type="text" inputmode="decimal" autocomplete="off" id="ownP" value="44,4" aria-describedby="erro-ownp">
-                  <p class="erro" id="erro-ownp" hidden></p>
-                </div>
-                <p class="note">Por padrão, usamos a probabilidade implícita nas odds (sem a margem da casa). Com ela, o critério de Kelly sempre indica não apostar. Isso só muda se você informar uma probabilidade própria, e só faria sentido com uma razão concreta para isso.</p>
-              </div>
-            </details>
-          </div>
         </div>
 
         <!-- RESULTADOS -->
@@ -641,7 +616,7 @@
         </div>
       </div>
 
-      <p class="mesa-nota">A probabilidade "real" é aproximada removendo a margem da casa das odds. Não é a probabilidade verdadeira: é a melhor estimativa disponível sem informação privilegiada. A simulação de Monte Carlo não prevê o futuro: mostra a gama de resultados possíveis sob as mesmas premissas, repetidas centenas de vezes.</p>
+      <p class="mesa-nota"><strong>Premissa do simulador:</strong> a casa de apostas sabe mais que o apostador, então a probabilidade embutida nas odds, depois de retirada a margem, é tratada como a melhor aproximação da chance real do evento. É uma simplificação: a chance verdadeira não é conhecida. A simulação de Monte Carlo não prevê o futuro: mostra a gama de resultados possíveis sob as mesmas premissas, repetidas centenas de vezes.</p>
     </div>
   </section>
 
@@ -661,7 +636,7 @@
         <div>
           <h3>Limitações</h3>
           <ul>
-            <li>A probabilidade usada no simulador é uma estimativa a partir das odds, não a chance verdadeira do evento.</li>
+            <li>O simulador supõe que a probabilidade das odds, sem a margem da casa, se aproxima da chance real do evento. É uma premissa simplificadora: a chance verdadeira não é conhecida.</li>
             <li>A simulação supõe apostas independentes entre si, sempre com as mesmas odds.</li>
             <li>O Crupiê pode errar ou deixar de encontrar uma resposta. Confira as fontes indicadas.</li>
           </ul>
@@ -742,8 +717,7 @@
       { label: 'Empate', odd: 3.30, texto: '3,30' },
       { label: 'Vitória do time visitante', odd: 3.40, texto: '3,40' },
     ],
-    picked: 0,
-    ownPEditado: false   // a pessoa já digitou uma probabilidade própria?
+    picked: 0
   };
 
   const $ = sel => document.querySelector(sel);
@@ -895,12 +869,6 @@
     $(sel).addEventListener('input', recalc);
   });
 
-  $('#useOwnP').addEventListener('change', e => {
-    $('#campo-ownP').style.display = e.target.checked ? '' : 'none';
-    state.ownPEditado = false;   // começa igual à probabilidade do mercado, sem arredondar
-    recalc();
-  });
-  $('#ownP').addEventListener('input', () => { state.ownPEditado = true; recalc(); });
   $('#rerunMC').addEventListener('click', () => {
     if(!lastModel) return;
     renderMonteCarlo(lastModel);
@@ -958,17 +926,8 @@
     const eN = (Number.isInteger(nApostas) && nApostas >= 5 && nApostas <= 150) ? null : 'Use um número inteiro entre 5 e 150.';
     marcarErro('#nApostas', 'erro-n', eN);
 
-    // probabilidade própria (só é lida depois que a pessoa digita)
-    const useOwn = $('#useOwnP').checked;
-    let ownP = NaN, eOwn = null;
-    if(useOwn && state.ownPEditado){
-      ownP = lerNumero($('#ownP').value, 'pct');
-      if(!(ownP >= 0 && ownP <= 99.9)) eOwn = 'Use um valor entre 0 e 99,9.';
-    }
-    marcarErro('#ownP', 'erro-ownp', eOwn);
-
-    const ok = !eBanca && !eAposta && !eMercado && !eN && !eOwn;
-    return { ok, incompleto, banca, V, pctValue, odds, nApostas, useOwn, ownP };
+    const ok = !eBanca && !eAposta && !eMercado && !eN;
+    return { ok, incompleto, banca, V, pctValue, odds, nApostas };
   }
 
   // ---------- Modelo (fórmulas da calculadora original) ----------
@@ -982,14 +941,9 @@
 
     const i = state.picked;
     const O = odds[i];
-    const pMarket = pFair[i];
-
-    const useOwn = e.useOwn;
-    const usaPropria = useOwn && state.ownPEditado;
-    if(!usaPropria){
-      $('#ownP').value = fmtNum(pMarket*100, 1);
-    }
-    const p = usaPropria ? e.ownP/100 : pMarket;
+    // Premissa: a casa sabe mais que o apostador, então a probabilidade das odds
+    // sem a margem é a melhor aproximação da chance real do evento.
+    const p = pFair[i];
 
     const V = e.V;
 
@@ -1004,12 +958,13 @@
     const userStats = statsFor(V);
 
     const b = O - 1;
-    const kellyF = Math.max(0, p - (1-p)/b);
+    let kellyF = Math.max(0, p - (1-p)/b);
+    if(kellyF < 1e-9) kellyF = 0;   // com a probabilidade sem margem, Kelly é zero (sobras de arredondamento viram zero)
     const kellyStake = kellyF * banca;
     const kellyStats = statsFor(kellyStake);
 
     return {
-      valid: true, banca, margin, S, p, pMarket, useOwn, O, V, nApostas: e.nApostas,
+      valid: true, banca, margin, S, p, O, V, nApostas: e.nApostas,
       stakeMode: state.stakeMode,
       pctValue: e.pctValue,
       user: userStats, kellyF, kelly: kellyStats,
@@ -1040,9 +995,6 @@
   }
 
   function recalc(){
-    const pick = state.outcomes[state.picked];
-    $('#lbl-ownp').textContent = `Sua probabilidade estimada para "${(pick && pick.label) || ('Resultado ' + (state.picked+1))}" (%)`;
-
     const e = lerEntradas();
     if(!e.ok){
       $('#rerunMC').disabled = true;
@@ -1059,27 +1011,18 @@
 
     const evSign = signClass(m.user.EV, 0.005*Math.max(m.user.stake,1));
     const pillLabel = evSign === 'profit' ? 'Favorável' : (evSign === 'loss' ? 'Desfavorável' : 'Neutra');
-    const pillTexto = m.useOwn && state.ownPEditado ? pillLabel + ' pela sua probabilidade' : pillLabel;
+    const pillTexto = pillLabel;
 
-    let kellyBox;
-    if(m.kellyF === 0){
-      const motivo = m.useOwn && state.ownPEditado
-        ? `Com ${fmtPct(m.p)} de probabilidade própria, a aposta continua abaixo do ponto de equilíbrio da odd (${fmtPct(1/m.O)}).`
-        : (m.margin > 1e-9
-            ? 'O valor esperado é negativo em qualquer resultado deste mercado: é a margem da casa, distribuída matematicamente.'
-            : 'Neste mercado não há margem da casa: o valor esperado é zero, então não há vantagem em apostar.');
-      kellyBox = `<div class="callout loss"><span class="lead">Pelo critério de Kelly: não apostar.</span><p>${motivo}</p></div>`;
-    } else {
-      kellyBox = `<div class="callout"><span class="lead">Pelo critério de Kelly, a fração seria ${fmtPct(m.kellyF)} da banca (${fmtMoney(m.kelly.stake)}).</span>
-        <p>Isso só valeria se a sua probabilidade (${fmtPct(m.p)}) estivesse certa: ela supera o ponto de equilíbrio da odd (${fmtPct(1/m.O)}). Na prática, ninguém conhece a probabilidade real com essa precisão, e as odds são definidas para dar vantagem à casa.</p></div>`;
-    }
+    const motivo = m.margin > 1e-9
+      ? 'O valor esperado é negativo em qualquer resultado deste mercado: é a margem da casa, distribuída matematicamente.'
+      : 'Neste mercado não há margem da casa: o valor esperado é zero, então não há vantagem em apostar.';
+    const kellyBox = `<div class="callout loss"><span class="lead">Pelo critério de Kelly: não apostar.</span><p>${motivo}</p></div>`;
 
-    const explicacao = (m.useOwn && state.ownPEditado)
-      ? `<details class="more">
-           <summary>por que o valor esperado muda ao trocar de resultado</summary>
-           <p>A probabilidade própria que você informou vale para o resultado escolhido. Ao trocar de resultado, a mesma probabilidade passa a ser comparada com outra odd, e o valor esperado muda. Ajuste o valor em "Avançado" para o novo resultado.</p>
-         </details>`
-      : `<details class="more">
+    const explicacao = `<details class="more">
+           <summary>por que usar a probabilidade da casa</summary>
+           <p>A casa de apostas trabalha com muito mais dados e especialistas do que um apostador comum. Por isso, o simulador parte desta premissa: a probabilidade embutida nas odds, depois de retirada a margem, é a melhor aproximação disponível da chance real do evento. É uma simplificação, não um fato: a chance verdadeira não é conhecida.</p>
+         </details>
+         <details class="more">
            <summary>por que trocar de resultado não muda o valor esperado</summary>
            <p>Dentro do mesmo mercado, probabilidade × odd é sempre a mesma constante para qualquer resultado, então o valor esperado é idêntico entre os ${m.nOutcomes} resultados. O que muda é o <strong>risco</strong>: resultados com odd mais alta (menos prováveis) têm desvio-padrão maior, para o mesmo valor esperado. Troque de resultado e observe o "Risco" mudar, com o valor esperado parado.</p>
          </details>`;
@@ -1104,6 +1047,7 @@
         <div class="stat">
           <div class="k">Probabilidade usada</div>
           <div class="v">${fmtPct(m.p)}</div>
+          <div class="cap">Da odd, sem a margem da casa</div>
         </div>
         <div class="stat">
           <div class="k">Margem da casa</div>
