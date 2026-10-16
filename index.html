@@ -3,62 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Entenda as apostas esportivas: assistente e simulador</title>
-<meta name="description" content="Projeto acadêmico e educativo: um assistente que responde dúvidas sobre apostas esportivas e um simulador que mostra probabilidade, valor esperado e risco. Gratuito e sem cadastro.">
+<title>Conta da Casa</title>
+<meta name="description" content="Conta da Casa: projeto acadêmico e educativo sobre apostas esportivas. Pergunte ao Crupiê, nosso assistente, e use o simulador para ver quanto do seu dinheiro fica com a casa. Gratuito e sem cadastro.">
+<meta name="theme-color" content="#0F5132">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-22 -22 44 44'%3E%3Ccircle r='21' fill='%23B3261E'/%3E%3Cg fill='%23fff'%3E%3Crect x='-3.6' y='-21' width='7.2' height='8' rx='1.5'/%3E%3Crect x='-3.6' y='-21' width='7.2' height='8' rx='1.5' transform='rotate(60)'/%3E%3Crect x='-3.6' y='-21' width='7.2' height='8' rx='1.5' transform='rotate(120)'/%3E%3Crect x='-3.6' y='-21' width='7.2' height='8' rx='1.5' transform='rotate(180)'/%3E%3Crect x='-3.6' y='-21' width='7.2' height='8' rx='1.5' transform='rotate(240)'/%3E%3Crect x='-3.6' y='-21' width='7.2' height='8' rx='1.5' transform='rotate(300)'/%3E%3C/g%3E%3Ccircle r='10.5' fill='none' stroke='%23fff' stroke-width='2.6'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700..900&family=Figtree:wght@400..700&display=swap" rel="stylesheet">
 <style>
   /* =========================================================
-     CORES
-     Contraste revisado para leitura (WCAG AA):
-     textos >= 4,5:1 e bordas de campos >= 3:1 sobre o fundo.
+     CONTA DA CASA · identidade visual
+     Papel e tinta para ler; feltro verde como tom de fundo da
+     "mesa" (o simulador); vermelho só para o que fica com a casa.
+     Contraste revisado (WCAG AA): textos >= 4,5:1.
      ========================================================= */
   :root{
-    --bg: #FFFFFF;
-    --paper: #FFFFFF;
-    --ink: #111111;
-    --ink-soft: #6B6B6B;
-    --ink-faint: #707070;
-    --line: #1A1A1A;
-    --hair: #E2E2E2;
-    --hair-strong: #C7C7C7;
-    --invert-ink: #FFFFFF;
-    --focus: #111111;
-    --card-fill: rgba(17,17,17,0.025);
-    --card-border: rgba(17,17,17,0.12);
-    --field-border: #8C8C8C;
-    --profit: #1E7A4C;
-    --profit-bg: rgba(30,122,76,0.08);
-    --loss: #B3261E;
-    --loss-bg: rgba(179,38,30,0.07);
+    /* paleta */
+    --papel: #FFFFFF;
+    --papel-2: #EEF3F0;
+    --superficie: #FFFFFF;
+    --tinta: #0E1A14;
+    --tinta-2: #44544B;
+    --tinta-3: #5E6E65;
+    --linha: #C9D4CE;
+    --linha-forte: #8A9A91;
+    --feltro: #0F5132;
+    --feltro-escuro: #0B3F27;
+    --feltro-texto: #FFFFFF;
+    --feltro-texto-2: #D3E6DB;
+    --casa: #B3261E;
+    --casa-fundo: #FBEBE9;
+    --ganho: #1E7A4C;
+    --ganho-fundo: #E6F3EC;
+    --foco: #0E1A14;
+    --logo-meiao: #0F5132;
+    --logo-faixa: #FFFFFF;
+    --logo-chuteira: #0E1A14;
+
+    /* nomes usados pelo gráfico e pelo código do simulador */
+    --ink: var(--tinta);
+    --ink-soft: var(--tinta-2);
+    --ink-faint: var(--tinta-3);
+    --hair: #DCE4DF;
+    --line: var(--tinta);
+    --profit: var(--ganho);
+    --profit-bg: var(--ganho-fundo);
+    --loss: var(--casa);
+    --loss-bg: var(--casa-fundo);
+    --linha-media: var(--casa);
+
+    /* tipografia */
+    --display: 'Big Shoulders Display', 'Arial Narrow', 'Roboto Condensed', sans-serif-condensed, Impact, sans-serif;
+    --texto: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+    /* movimento */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+    --wrap: 1180px;
+    --gutter: 20px;
+
+    /* máscara do serrilhado do recibo (não é cor nem degradê visível) */
+    --serrilhado: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 14px 7px repeat-x, /* taste-skill-ignore */
+                  linear-gradient(#000 0 0) top / 100% calc(100% - 6px) no-repeat; /* taste-skill-ignore */
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #0B0B0B;
-      --paper: #0B0B0B;
-      --ink: #F2F2F0;
-      --ink-soft: #A6A6A6;
-      --ink-faint: #8A8A8A;
-      --line: #EDEDED;
-      --hair: #2A2A2A;
-      --hair-strong: #3C3C3C;
-      --invert-ink: #0B0B0B;
-      --focus: #F2F2F0;
-      --card-fill: rgba(255,255,255,0.045);
-      --card-border: rgba(255,255,255,0.14);
-      --field-border: #6E6E6E;
-      --profit: #4FBE85;
-      --profit-bg: rgba(79,190,133,0.10);
-      --loss: #E5695F;
-      --loss-bg: rgba(229,105,95,0.10);
+      --papel: #0C1511; --papel-2: #132019; --superficie: #16241C;
+      --tinta: #EAF1EC; --tinta-2: #B2C2B8; --tinta-3: #93A59A;
+      --linha: #33463B; --linha-forte: #5E7366;
+      --feltro: #0F5132; --feltro-escuro: #0A3B24;
+      --casa: #F28B82; --casa-fundo: rgba(242,139,130,0.12);
+      --ganho: #63CF96; --ganho-fundo: rgba(99,207,150,0.12);
+      --foco: #EAF1EC; --hair: #263830;
+      --logo-chuteira: #EAF1EC; --logo-meiao: #3FA372; --logo-faixa: #FFFFFF;
     }
   }
-  :root[data-theme="dark"] {
-    --bg: #0B0B0B; --paper: #0B0B0B; --ink: #F2F2F0; --ink-soft: #A6A6A6; --ink-faint: #8A8A8A;
-    --line: #EDEDED; --hair: #2A2A2A; --hair-strong: #3C3C3C; --invert-ink: #0B0B0B; --focus: #F2F2F0;
-    --card-fill: rgba(255,255,255,0.045); --card-border: rgba(255,255,255,0.14); --field-border: #6E6E6E;
-    --profit: #4FBE85; --profit-bg: rgba(79,190,133,0.10); --loss: #E5695F; --loss-bg: rgba(229,105,95,0.10);
+  :root[data-theme="dark"]{
+    --papel: #0C1511; --papel-2: #132019; --superficie: #16241C;
+    --tinta: #EAF1EC; --tinta-2: #B2C2B8; --tinta-3: #93A59A;
+    --linha: #33463B; --linha-forte: #5E7366;
+    --feltro: #0F5132; --feltro-escuro: #0A3B24;
+    --casa: #F28B82; --casa-fundo: rgba(242,139,130,0.12);
+    --ganho: #63CF96; --ganho-fundo: rgba(99,207,150,0.12);
+    --foco: #EAF1EC; --hair: #263830;
+    --logo-chuteira: #EAF1EC; --logo-meiao: #3FA372; --logo-faixa: #FFFFFF;
   }
 
   *{ box-sizing: border-box; }
@@ -66,260 +94,354 @@
   html{ scroll-behavior: smooth; }
   @media (prefers-reduced-motion: reduce){ html{ scroll-behavior: auto; } }
   body{
-    background: var(--bg); color: var(--ink);
-    font-family: 'IBM Plex Sans', system-ui, sans-serif;
-    font-variant-numeric: tabular-nums;
-    line-height: 1.5;
-    padding: 0 20px 72px;
+    background: var(--papel); color: var(--tinta);
+    font-family: var(--texto); font-size: 17px; line-height: 1.55;
     -webkit-font-smoothing: antialiased;
   }
-  h1,h2,h3{ font-family:'Newsreader', Georgia, serif; font-weight:600; margin:0; color: var(--ink); }
-  .wrap{ max-width: 980px; margin:0 auto; }
-  a{ color: var(--ink); }
+  @media (min-width: 900px){ body{ font-size: 18px; } }
+  h1,h2,h3{ margin:0; color: inherit; }
+  h1,h2{ font-family: var(--display); font-weight: 800; letter-spacing: 0; line-height: 0.95; }
+  h3{ font-family: var(--texto); font-weight: 700; font-size: 18px; line-height: 1.3; }
+  p{ margin: 0 0 1em; }
+  /* Linhas de leitura confortáveis: no máximo ~70 caracteres. */
+  p, li, figcaption, .chart-axes{ max-width: 68ch; }
+  a{ color: inherit; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  .wrap{ max-width: var(--wrap); margin: 0 auto; padding-inline: var(--gutter); }
+  @media (max-width: 480px){ :root{ --gutter: 16px; } }
 
-  /* ---------- Acessibilidade: utilitários ---------- */
-  .sr-only{
-    position:absolute !important; width:1px; height:1px; padding:0; margin:-1px;
-    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
-  }
-  .skip{
-    position:absolute; left:-9999px; top:8px; z-index:100;
-    background: var(--ink); color: var(--invert-ink); padding:10px 14px; border-radius:7px;
-    font-weight:600; text-decoration:none;
-  }
+  /* ---------- Acessibilidade ---------- */
+  .sr-only{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  .skip{ position:absolute; left:-9999px; top:8px; z-index:100; background: var(--tinta); color: var(--papel); padding:10px 14px; border-radius:6px; font-weight:700; text-decoration:none; }
   .skip:focus{ left:16px; }
-  :focus-visible{ outline: 3px solid var(--focus); outline-offset: 2px; }
-  input:focus-visible, select:focus-visible{ outline: 2px solid var(--focus); outline-offset: 1px; }
+  :focus-visible{ outline: 3px solid var(--foco); outline-offset: 3px; }
+  input:focus-visible, select:focus-visible{ outline: 3px solid var(--foco); outline-offset: 1px; }
 
-  /* ---------- Cabeçalho do site ---------- */
-  .site-header{ border-bottom: 1px solid var(--line); }
-  .site-header .wrap{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding: 12px 0; }
-  .brand{ font-family:'Newsreader', Georgia, serif; font-size:20px; font-weight:600; color: var(--ink); text-decoration:none; }
-  .site-nav ul{ list-style:none; display:flex; gap:4px; margin:0; padding:0; flex-wrap:wrap; }
-  .site-nav a{ display:inline-block; padding:8px 10px; border-radius:7px; font-size:14px; font-weight:600; text-decoration:none; color: var(--ink); }
-  .site-nav a:hover{ background: var(--card-fill); text-decoration: underline; }
+  /* ---------- Cabeçalho ---------- */
+  .topo .wrap{ display:flex; align-items:center; justify-content:space-between; gap: 4px 16px; flex-wrap: wrap; padding-block: 14px; }
+  @media (max-width: 560px){ .topo .wrap{ padding-block: 10px 4px; } .topo nav ul{ margin-left: -12px; } .marca svg{ width: 50px; } .marca span{ font-size: 27px; } }
+  .marca{ display:inline-flex; align-items:center; gap: 10px; text-decoration:none; color: var(--tinta); }
+  .marca svg{ width: 58px; height: auto; display:block; }
+  .marca span{ font-family: var(--display); font-weight: 800; font-size: 30px; line-height: 1; }
+  .topo nav ul{ list-style:none; display:flex; gap: 6px; margin:0; padding:0; flex-wrap: wrap; }
+  .topo nav a{ display:inline-flex; align-items:center; min-height:44px; padding: 0 12px; font-weight:700; font-size: 16px; text-decoration:none; border-radius: 999px; }
+  @media (hover: hover) and (pointer: fine){ .topo nav a:hover{ background: var(--papel-2); } }
+
+  /* ---------- Botões ---------- */
+  .botao{
+    display:inline-flex; align-items:center; justify-content:center; min-height: 52px; padding: 0 26px;
+    border-radius: 999px; font: inherit; font-weight: 700; font-size: 16px; text-decoration: none; border: 0; cursor: pointer;
+    transition: transform 160ms var(--ease-out), background-color 160ms ease;
+  }
+  .botao:active{ transform: scale(0.97); }
+  .botao.primario{ background: var(--feltro); color: #FFFFFF; }
+  @media (hover: hover) and (pointer: fine){ .botao.primario:hover{ background: var(--feltro-escuro); } }
+  .link-forte{ display:inline-flex; align-items:center; min-height: 52px; font-weight:700; font-size: 16px; }
 
   /* ---------- Abertura ---------- */
-  .hero{ padding: 40px 0 32px; border-bottom: 1px solid var(--line); }
-  .hero h1{ font-size: clamp(30px, 5vw, 44px); letter-spacing: -0.01em; max-width: 20ch; line-height:1.1; }
-  .hero .sub{ margin: 14px 0 0; color: var(--ink-soft); font-size: 17px; max-width: 60ch; }
-  .tag{
-    display:inline-block; margin-top:14px; font-size:13px; color: var(--ink-soft);
-    border: 1px solid var(--hair-strong); padding: 3px 10px; border-radius: 999px;
+  .abertura{ padding: 40px 0 112px; }
+  .abertura .wrap{ display:grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 48px; align-items: center; }
+  .abertura h1{ font-size: clamp(44px, 6.2vw, 88px); }
+  @media (max-width: 860px){ .abertura h1{ font-size: clamp(44px, 10vw, 80px); } }
+  .abertura-sub{ font-size: 20px; max-width: 38ch; margin: 22px 0 28px; color: var(--tinta); }
+  .acoes{ display:flex; gap: 8px 24px; flex-wrap: wrap; align-items:center; }
+  .aviso-curto{ margin: 22px 0 0; font-size: 16px; color: var(--tinta-2); }
+  .abertura-mesa{ background: var(--feltro); padding: 40px 32px 48px; border-radius: 6px; }
+  @media (max-width: 860px){
+    .abertura{ padding: 20px 0 72px; }
+    .abertura .wrap{ grid-template-columns: 1fr; gap: 36px; }
+    .abertura-mesa{ padding: 20px 16px 28px; }
   }
-  .cta{ display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
-  .btn{
-    display:inline-flex; align-items:center; min-height:44px; padding: 10px 16px; border-radius:7px;
-    font-size:15px; font-weight:600; text-decoration:none; border:1px solid var(--ink);
+
+  /* A "conta": um recibo de papel sobre o feltro.
+     taste-skill-ignore: os gradientes abaixo são só máscara para o serrilhado do papel, não aparecem como cor. */
+  .conta{
+    --dente: 14px;
+    background: var(--superficie); color: var(--tinta); margin: 0;
+    padding: 24px 24px calc(28px + var(--dente));
+    -webkit-mask: var(--serrilhado); mask: var(--serrilhado);
   }
-  .btn.primary{ background: var(--ink); color: var(--invert-ink); }
-  .btn.secondary{ background: transparent; color: var(--ink); }
-  .btn:hover{ opacity:.88; }
+  .conta-titulo{ font-family: var(--display); font-weight: 800; font-size: 30px; line-height: 1; margin: 0 0 6px; }
+  .conta figcaption, .conta .conta-sobre{ font-size: 16px; color: var(--tinta-2); margin: 0 0 16px; }
+  .conta-linhas{ margin: 0; font-variant-numeric: tabular-nums; }
+  .conta-linhas > div{ display:flex; justify-content:space-between; align-items: baseline; gap: 16px; padding: 10px 0; border-bottom: 1px dashed var(--linha); } /* taste-skill-ignore: itens de um recibo, como linhas de tabela */
+  .conta-linhas dt{ font-size: 16px; }
+  .conta-linhas dd{ margin:0; font-weight: 700; font-size: 18px; white-space: nowrap; }
+  .conta-linhas .casa{ border-bottom: 0; padding-top: 14px; }
+  .conta-linhas .casa dt{ font-weight: 700; }
+  .conta-linhas .casa dd{ font-family: var(--display); font-weight: 800; font-size: 40px; line-height: 1; color: var(--casa); }
+  .conta-rodape{ font-size: 16px; color: var(--tinta-2); margin: 14px 0 0; }
 
   /* ---------- Seções ---------- */
-  .section{ padding: 40px 0; border-bottom: 1px solid var(--hair); scroll-margin-top: 8px; }
-  .section > h2{ font-size: clamp(24px, 3.6vw, 30px); letter-spacing:-0.01em; }
-  .section .lead{ font-size: 16px; color: var(--ink-soft); max-width: 62ch; margin: 8px 0 18px; }
-  .small{ font-size: 13px; color: var(--ink-soft); max-width: 72ch; margin: 10px 0 0; }
+  .secao{ padding: 112px 0; }
+  .secao h2, .mesa h2{ font-size: clamp(40px, 5.4vw, 72px); max-width: 16ch; }
+  @media (max-width: 860px){ .secao{ padding: 72px 0; } }
 
-  /* ---------- Assistente (Typebot) ---------- */
-  .bot-frame{ border: 1px solid var(--card-border); border-radius: 12px; overflow:hidden; background: var(--paper); }
-  typebot-standard{ display:block; width:100%; height:620px; }
-  @media (max-width: 560px){ typebot-standard{ height: 75vh; } }
-  .bot-aviso{ padding: 32px 20px; font-size: 15px; color: var(--ink-soft); text-align:center; }
-
-  /* ---------- Simulador: como usar e glossário ---------- */
-  .howto{ margin: 4px 0 6px; padding-left: 22px; max-width: 70ch; font-size: 15px; }
-  .howto li{ margin-bottom: 4px; }
-  details.glossario{ margin: 14px 0 4px; max-width: 76ch; border: 1px solid var(--card-border); border-radius: 10px; padding: 10px 14px; background: var(--card-fill); }
-  details.glossario summary{ cursor:pointer; font-weight:600; font-size: 14px; min-height: 28px; display:flex; align-items:center; }
-  details.glossario dl{ margin: 10px 0 2px; font-size: 14px; }
-  details.glossario dt{ font-weight:600; margin-top: 10px; }
-  details.glossario dd{ margin: 2px 0 0; color: var(--ink-soft); }
-
-  /* ---------- Layout da calculadora ---------- */
-  .grid{ display:grid; grid-template-columns: minmax(280px,340px) 1fr; gap: 22px; margin-top: 22px; align-items:start; }
-  @media (max-width: 760px){ .grid{ grid-template-columns: 1fr; } }
-  .grid > div{ min-width: 0; } /* evita que tabelas largas estiquem a página no celular */
-
-  .input-card{
-    background: var(--card-fill);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    padding: 18px 20px;
-    margin-bottom: 14px;
+  /* Crupiê */
+  .crupie{ background: var(--papel-2); }
+  .crupie .wrap{ display:grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 48px; align-items: start; }
+  .crupie-texto p{ max-width: 42ch; }
+  .crupie-texto h2{ margin-bottom: 22px; }
+  .nota-pequena{ font-size: 16px; color: var(--tinta-2); }
+  .chat-moldura{ background: var(--superficie); border-radius: 6px; overflow: hidden; }
+  typebot-standard{ display:block; width:100%; height: 640px; }
+  .bot-aviso{ padding: 40px 24px; margin:0; text-align:center; color: var(--tinta-2); }
+  @media (max-width: 860px){
+    .crupie .wrap{ grid-template-columns: 1fr; gap: 28px; }
+    typebot-standard{ height: 78vh; }
   }
-  .input-card h3{ font-size: 16px; font-weight:600; margin-bottom: 12px; }
-  .input-card .hint{ font-size: 13px; color: var(--ink-soft); margin: -6px 0 12px; }
 
-  label, .label{ display:block; font-size: 13px; font-weight:600; color: var(--ink-soft); margin-bottom:5px; }
-  .field{ margin-bottom: 13px; }
+  /* ---------- A mesa (simulador) ---------- */
+  .mesa{ background: var(--feltro); color: var(--feltro-texto); padding: 112px 0; --foco: #FFFFFF; }
+  .mesa a{ color: inherit; }
+  .mesa-sub{ font-size: 20px; max-width: 52ch; color: var(--feltro-texto-2); margin: 20px 0 0; }
+  .mesa-intro{ display:grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px 48px; margin: 40px 0 32px; align-items: start; }
+  .howto{ margin: 0; padding-left: 22px; color: var(--feltro-texto); }
+  .howto li{ margin-bottom: 8px; }
+  .howto li::marker{ font-weight: 700; }
+  details.glossario{ background: var(--superficie); color: var(--tinta); border-radius: 6px; padding: 14px 20px; --foco: var(--tinta); }
+  details.glossario summary{ cursor:pointer; font-weight:700; min-height: 32px; display:flex; align-items:center; }
+  details.glossario dl{ margin: 12px 0 4px; font-size: 16px; }
+  details.glossario dt{ font-weight:700; margin-top: 12px; }
+  details.glossario dd{ margin: 2px 0 0; color: var(--tinta-2); }
+  @media (max-width: 860px){ .mesa{ padding: 72px 0; } .mesa-intro{ grid-template-columns: 1fr; } }
+
+  .grid{ display:grid; grid-template-columns: minmax(300px, 380px) minmax(0, 1fr); gap: 20px; align-items:start; }
+  @media (max-width: 860px){ .grid{ grid-template-columns: 1fr; } }
+  .grid > div{ min-width: 0; }
+
+  /* folhas de papel sobre o feltro */
+  .input-card, .block{ background: var(--superficie); color: var(--tinta); border-radius: 6px; padding: 22px 22px; margin-bottom: 16px; --foco: var(--tinta); }
+  .block:last-of-type{ margin-bottom: 0; }
+  .input-card h3, .block h3{ font-family: var(--display); font-weight: 800; font-size: 30px; line-height: 1; margin-bottom: 14px; }
+  .input-card .hint{ font-size: 16px; color: var(--tinta-2); margin: -4px 0 14px; }
+  .block .hint{ font-size: 16px; color: var(--tinta-2); margin: 0 0 14px; }
+
+  label, .label{ display:block; font-size: 16px; font-weight:700; color: var(--tinta); margin-bottom:6px; }
+  .field{ margin-bottom: 16px; }
   .field:last-child{ margin-bottom: 0; }
   input[type=number], input[type=text], select{
-    width:100%; font: inherit; font-size:15px; padding: 9px 10px; min-height: 40px;
-    border: 1px solid var(--field-border); border-radius:7px;
-    background: var(--paper); color: var(--ink);
+    width:100%; font: inherit; font-size: 16px; padding: 10px 12px; min-height: 46px;
+    border: 1.5px solid var(--linha-forte); border-radius: 6px;
+    background: var(--papel); color: var(--tinta); font-variant-numeric: tabular-nums;
   }
-  input[aria-invalid="true"]{ border-color: var(--loss); box-shadow: 0 0 0 1px var(--loss); }
-  input::placeholder{ color: var(--ink-faint); }
-
-  .seg{ display:flex; border: 1px solid var(--field-border); border-radius: 7px; overflow:hidden; }
-  .seg button{
-    flex:1; padding: 10px 8px; min-height: 40px; font: inherit; font-size: 13px; font-weight:600;
-    background: var(--paper); color: var(--ink-soft); border:none; cursor:pointer;
-    border-right: 1px solid var(--field-border);
-  }
-  .seg button:last-child{ border-right:none; }
-  .seg button.active{ background: var(--ink); color: var(--invert-ink); }
-  .seg button:focus-visible{ outline-offset: -4px; }
-
-  .outcome-head{ display:grid; grid-template-columns: 1fr 76px 32px; gap:7px; font-size: 12px; font-weight:600; color: var(--ink-soft); margin-bottom: 4px; }
-  .outcomes{ display:flex; flex-direction:column; gap:8px; margin-bottom:8px; }
-  .outcome-row{ display:grid; grid-template-columns: 1fr 76px 32px; gap:7px; align-items:center; }
-  .outcome-row input[type=text]{ font-size:14px; padding:8px; }
-  .outcome-row input.odd{ text-align:right; padding:8px 6px; }
-  .erro{ color: var(--loss); font-size:13px; font-weight:600; margin:6px 0 0; line-height:1.45; }
+  input[aria-invalid="true"]{ border-color: var(--casa); box-shadow: 0 0 0 1px var(--casa); } /* taste-skill-ignore: contorno de erro de campo de formulário */
+  input::placeholder{ color: var(--tinta-3); }
+  .erro{ color: var(--casa); font-size: 16px; font-weight: 700; margin: 6px 0 0; line-height: 1.45; }
   .erro[hidden]{ display:none; }
-  .rm{
-    width:32px; height:32px; border:none; background:transparent; color: var(--ink-soft); border-radius: 6px;
-    cursor:pointer; font-size:20px; line-height:1; padding:0;
+
+  .seg{ display:flex; background: var(--papel-2); border-radius: 999px; padding: 4px; gap: 4px; }
+  .seg button{
+    flex:1; min-height: 42px; padding: 0 10px; font: inherit; font-size: 16px; font-weight: 700;
+    background: transparent; color: var(--tinta-2); border: 0; border-radius: 999px; cursor:pointer;
+    transition: transform 160ms var(--ease-out), background-color 160ms ease, color 160ms ease;
   }
-  .rm:hover{ color: var(--loss); background: var(--loss-bg); }
-  .rm:disabled{ opacity:.3; cursor:default; background:transparent; color: var(--ink-soft); }
+  .seg button:active{ transform: scale(0.97); }
+  .seg button.active{ background: var(--tinta); color: var(--papel); }
+
+  .outcome-head{ display:grid; grid-template-columns: 1fr 84px 36px; gap: 8px; font-size: 16px; font-weight: 700; color: var(--tinta-2); margin-bottom: 6px; }
+  .outcomes{ display:flex; flex-direction:column; gap: 8px; margin-bottom: 10px; }
+  .outcome-row{ display:grid; grid-template-columns: 1fr 84px 36px; gap: 8px; align-items:center; }
+  .outcome-row input[type=text]{ font-size: 16px; padding: 9px 10px; }
+  .outcome-row input.odd{ text-align: right; }
+  .rm{ width: 36px; height: 36px; border:0; background: transparent; color: var(--tinta-2); border-radius: 999px; cursor:pointer; font-size: 24px; line-height: 1; padding: 0; transition: transform 160ms var(--ease-out); }
+  .rm:active{ transform: scale(0.92); }
+  @media (hover: hover) and (pointer: fine){ .rm:hover{ color: var(--casa); background: var(--casa-fundo); } }
+  .rm:disabled{ opacity: .3; cursor: default; background: transparent; color: var(--tinta-2); }
   .add-outcome{
-    width:100%; padding:10px; min-height: 40px; border: 1px dashed var(--field-border); background:transparent; border-radius:7px;
-    color: var(--ink); font: inherit; font-size:13px; font-weight:600; cursor:pointer; margin-top:2px;
+    width:100%; min-height: 44px; border: 1.5px dashed var(--linha-forte); background: transparent; border-radius: 6px;
+    color: var(--tinta); font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 4px;
+    transition: transform 160ms var(--ease-out);
   }
-  .add-outcome:hover{ border-color: var(--ink); }
+  .add-outcome:active{ transform: scale(0.98); }
 
-  fieldset.pick{ border:none; margin: 16px 0 0; padding:0; min-width:0; }
-  fieldset.pick legend{ font-size: 13px; font-weight:600; color: var(--ink-soft); padding:0; margin-bottom: 4px; }
-  .radiogroup{ display:flex; flex-direction:column; gap:0; margin-top:2px; }
-  .radiogroup label.opt{
-    display:flex; align-items:center; gap:10px; font-weight:500; font-size:14px; color: var(--ink-soft);
-    padding: 10px 2px; margin:0; cursor:pointer; border-bottom: 1px solid var(--card-border);
-  }
-  .radiogroup label.opt:last-child{ border-bottom:none; }
-  .radiogroup label.opt:has(input:checked){ color: var(--ink); font-weight:600; }
-  .radiogroup input{ accent-color: var(--ink); width:18px; height:18px; flex:none; margin:0; }
+  fieldset.pick{ border:0; margin: 18px 0 0; padding:0; min-width:0; }
+  fieldset.pick legend{ font-size: 16px; font-weight: 700; padding: 0; margin-bottom: 4px; }
+  .radiogroup{ display:flex; flex-direction:column; }
+  .radiogroup{ gap: 2px; }
+  .radiogroup label.opt{ display:flex; align-items:center; gap: 12px; font-weight: 400; font-size: 16px; padding: 9px 10px; margin:0 -10px; cursor:pointer; border-radius: 6px; color: var(--tinta-2); }
+  .radiogroup label.opt:has(input:checked){ background: var(--papel-2); }
+  .radiogroup label.opt:has(input:checked){ color: var(--tinta); font-weight: 700; }
+  .radiogroup input{ accent-color: var(--feltro); width: 20px; height: 20px; flex: none; margin: 0; }
 
-  details.more{ margin-top: 10px; }
-  details.more summary{ font-size:13px; color: var(--ink-soft); cursor:pointer; list-style:none; padding: 4px 0; }
-  details.more summary::-webkit-details-marker{ display:none; }
-  details.more summary::before{ content:'Por quê? '; text-decoration: underline dotted; }
-  details.more[open] summary::before{ content:'Ocultar '; }
-  details.more p{ font-size:13.5px; color: var(--ink-soft); margin: 6px 0 0; line-height:1.55; }
-
-  .advanced{ font-size:14px; }
-  .advanced summary{
-    cursor:pointer; font-size:14px; font-weight:600; color: var(--ink);
-    list-style:none; display:flex; align-items:center; gap:6px; min-height: 28px;
-  }
+  .advanced summary{ cursor:pointer; font-weight: 700; min-height: 32px; display:flex; align-items:center; gap: 8px; list-style: none; }
   .advanced summary::-webkit-details-marker{ display:none; }
-  .advanced summary::before{ content:'+'; font-size:16px; color: var(--ink-soft); width:12px; }
-  .advanced[open] summary::before{ content:'–'; }
-  .advanced .body{ margin-top:12px; }
-  .checkline{ display:flex; align-items:flex-start; gap:10px; margin-bottom:10px; }
-  .checkline input{ margin-top:2px; accent-color: var(--ink); width:18px; height:18px; flex:none; }
-  .checkline label{ margin:0; font-weight:500; color: var(--ink); font-size:14px; line-height:1.4; }
-  .advanced .note{ font-size:13px; color: var(--ink-soft); margin-top:8px; line-height:1.55; }
+  .advanced summary::before{ content: '+'; font-family: var(--display); font-size: 24px; line-height: 1; width: 14px; color: var(--feltro); }
+  .advanced[open] summary::before{ content: '–'; }
+  .advanced .body{ margin-top: 14px; }
+  .checkline{ display:flex; align-items:flex-start; gap: 10px; margin-bottom: 12px; }
+  .checkline input{ margin-top: 3px; accent-color: var(--feltro); width: 20px; height: 20px; flex: none; }
+  .checkline label{ margin:0; font-weight: 400; font-size: 16px; line-height: 1.4; }
+  .advanced .note{ font-size: 16px; color: var(--tinta-2); margin: 10px 0 0; }
 
-  /* ---------- Resultados ---------- */
-  .block{ padding: 20px 0; border-bottom: 1px solid var(--hair); }
-  .block:first-child{ padding-top: 0; }
-  .block h3{ font-size: 19px; font-weight:600; margin-bottom:2px; }
-  .block .hint{ font-size: 13.5px; color: var(--ink-soft); margin: 0 0 12px; }
+  /* resultado principal: a conta desta aposta */
+  #resultsCard{
+    --dente: 14px;
+    padding-bottom: calc(26px + var(--dente));
+    border-radius: 6px 6px 0 0;
+    -webkit-mask: var(--serrilhado); mask: var(--serrilhado);
+  }
+  .hero-number{ margin-top: 4px; }
+  .hero-number .k{ font-size: 16px; font-weight: 700; color: var(--tinta-2); }
+  .hero-number .v{ font-family: var(--display); font-size: clamp(56px, 7vw, 72px); font-weight: 800; line-height: 1; margin-top: 4px; }
+  .hero-number .v.profit{ color: var(--ganho); }
+  .hero-number .v.loss{ color: var(--casa); }
+  .hero-sub{ font-size: 16px; color: var(--tinta-2); margin-top: 10px; max-width: 60ch; }
+  .pill{ display:inline-block; border-radius: 999px; padding: 4px 12px; font-size: 16px; font-weight: 700; margin-top: 10px; background: var(--papel-2); color: var(--tinta-2); }
+  .pill.profit{ background: var(--ganho-fundo); color: var(--ganho); }
+  .pill.loss{ background: var(--casa-fundo); color: var(--casa); }
+  .conta-linhas.no-resultado{ margin-top: 18px; }
 
-  .hero-number{ margin-top: 2px; }
-  .hero-number .k{ font-size:14px; font-weight:600; color: var(--ink-soft); }
-  .hero-number .v{ font-family:'Newsreader', serif; font-size:48px; font-weight:600; line-height:1.05; margin-top:4px; }
-  .hero-number .v.profit{ color: var(--profit); }
-  .hero-number .v.loss{ color: var(--loss); }
-  .hero-sub{ font-size:13.5px; color: var(--ink-soft); margin-top:8px; max-width: 56ch; }
+  .stat-row{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 20px; padding-top: 16px; border-top: 2px solid var(--tinta); }
+  @media (max-width: 560px){ .stat-row{ grid-template-columns: 1fr 1fr; } }
+  .stat .k{ font-size: 16px; color: var(--tinta-2); font-weight: 700; }
+  .stat .v{ font-family: var(--display); font-size: 30px; font-weight: 800; line-height: 1.1; margin-top: 2px; }
+  .stat .v.loss{ color: var(--casa); }
+  .stat .v.profit{ color: var(--ganho); }
+  .stat .cap{ font-size: 16px; color: var(--tinta-3); margin-top: 2px; }
 
-  .pill{ display:inline-block; border:1px solid var(--hair-strong); border-radius: 999px; padding: 3px 11px; font-size:12.5px; font-weight:600; color: var(--ink-soft); margin-top:10px; }
-  .pill.profit{ border-color: var(--profit); color: var(--profit); }
-  .pill.loss{ border-color: var(--loss); color: var(--loss); }
+  .callout{ margin-top: 18px; padding: 14px 16px; border-radius: 6px; font-size: 16px; line-height: 1.5; background: var(--papel-2); }
+  .callout.loss{ background: var(--casa-fundo); }
+  .callout .lead{ font-weight: 700; display:block; margin-bottom: 2px; color: var(--tinta); }
+  .callout.loss .lead{ color: var(--casa); }
+  .callout p{ margin: 0; color: var(--tinta); }
 
-  .stat-row{ display:grid; grid-template-columns: repeat(3,1fr); gap:18px; margin-top:18px; padding-top:14px; border-top:1px solid var(--hair); }
-  @media (max-width:560px){ .stat-row{ grid-template-columns:1fr 1fr; } }
-  .stat .k{ font-size:12.5px; color: var(--ink-soft); font-weight:600; }
-  .stat .v{ font-size:19px; font-weight:600; margin-top:3px; font-family:'Newsreader',serif; }
-  .stat .v.loss{ color: var(--loss); }
-  .stat .cap{ font-size:12px; color: var(--ink-faint); margin-top:2px; }
-
-  .callout{ margin-top:16px; padding: 12px 14px; border-radius:9px; font-size:14px; line-height:1.55; background: var(--hair); background: color-mix(in srgb, var(--ink) 4%, transparent); }
-  .callout.profit{ background: var(--profit-bg); color: var(--profit); }
-  .callout.loss{ background: var(--loss-bg); color: var(--loss); }
-  .callout .lead{ font-weight:700; display:block; margin-bottom:2px; }
-  .callout p{ margin: 0; color: var(--ink); }
-  .callout.profit p, .callout.loss p{ color: inherit; }
+  details.more{ margin-top: 12px; }
+  details.more summary{ font-size: 16px; font-weight: 700; color: var(--tinta-2); cursor:pointer; padding: 4px 0; text-decoration: underline; text-underline-offset: 3px; }
+  details.more p{ font-size: 16px; color: var(--tinta-2); margin: 8px 0 0; }
 
   .table-scroll{ overflow-x:auto; }
-  table.compare{ width:100%; min-width: 420px; border-collapse:collapse; margin-top:4px; font-size:14px; }
-  table.compare thead th{ text-align:left; font-size:12.5px; color: var(--ink-soft); font-weight:600; padding:6px; border-bottom:1px solid var(--line); }
-  table.compare tbody th{ text-align:left; font-family:'IBM Plex Sans',sans-serif; font-size:14px; font-weight:600; padding:10px 6px; border-bottom:1px solid var(--hair); color: var(--ink); }
-  table.compare td{ padding:10px 6px; border-bottom:1px solid var(--hair); font-family:'Newsreader',serif; font-size:16px; text-align:right; white-space:nowrap; }
-  table.compare thead th:not(:first-child){ text-align:right; }
-  table.compare tbody tr:last-child td, table.compare tbody tr:last-child th{ border-bottom:none; }
-  table.compare td.profit{ color: var(--profit); }
-  table.compare td.loss{ color: var(--loss); }
+  table.compare{ width:100%; min-width: 440px; border-collapse: collapse; margin-top: 4px; font-size: 16px; font-variant-numeric: tabular-nums; }
+  table.compare thead th{ text-align:left; font-size: 16px; color: var(--tinta-2); font-weight: 700; padding: 8px 6px; border-bottom: 2px solid var(--tinta); }
+  table.compare tbody th{ text-align:left; font-weight: 700; padding: 12px 6px; border-bottom: 1px solid var(--hair); color: var(--tinta); }
+  table.compare td{ padding: 12px 6px; border-bottom: 1px solid var(--hair); text-align: right; white-space: nowrap; }
+  table.compare thead th:not(:first-child){ text-align: right; }
+  table.compare tbody tr:last-child td, table.compare tbody tr:last-child th{ border-bottom: 0; }
+  table.compare td.profit{ color: var(--ganho); font-weight: 700; }
+  table.compare td.loss{ color: var(--casa); font-weight: 700; }
   abbr[title]{ text-decoration: none; }
+  @media (max-width: 600px){
+    .table-scroll{ overflow: visible; }
+    table.compare{ min-width: 0; }
+    table.compare thead{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
+    table.compare, table.compare tbody, table.compare tr, table.compare th, table.compare td{ display:block; width:auto; }
+    table.compare tbody tr{ padding: 12px 0; border-bottom: 1px solid var(--hair); }
+    table.compare tbody tr:last-child{ border-bottom: 0; }
+    table.compare tbody th{ padding: 0 0 6px; border: 0; font-size: 16px; }
+    table.compare td{ display:flex; justify-content:space-between; gap: 12px; padding: 3px 0; border: 0; text-align: right; }
+    table.compare td::before{ content: attr(data-label); color: var(--tinta-2); font-weight: 400; text-align: left; white-space: normal; }
+  }
 
-  /* ---------- Monte Carlo ---------- */
-  .mc-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:4px; }
-  .mc-controls{ display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; }
-  .mc-controls .field{ margin-bottom:0; }
-  .mc-controls input{ width:90px; text-align:right; }
+  .mc-head{ display:flex; align-items:flex-end; justify-content:space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
+  .mc-head h3{ margin-bottom: 6px; }
+  .mc-controls{ display:flex; align-items:flex-end; gap: 12px; flex-wrap: wrap; }
+  .mc-controls .field{ margin-bottom: 0; }
+  .mc-controls input{ width: 100px; text-align: right; }
   .mc-controls .erro{ max-width: 220px; }
   .rerun-btn{
-    padding: 10px 14px; min-height: 40px; border: 1px solid var(--ink); background: var(--ink); color: var(--invert-ink);
-    border-radius:7px; font: inherit; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap;
+    min-height: 46px; padding: 0 20px; border: 0; background: var(--feltro); color: #FFFFFF; border-radius: 999px;
+    font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; white-space: nowrap;
+    transition: transform 160ms var(--ease-out), background-color 160ms ease;
   }
-  .rerun-btn:hover{ opacity:.85; }
-  .rerun-btn:disabled{ opacity:.4; cursor:default; }
+  .rerun-btn:active{ transform: scale(0.97); }
+  @media (hover: hover) and (pointer: fine){ .rerun-btn:hover{ background: var(--feltro-escuro); } }
+  .rerun-btn:disabled{ opacity: .4; cursor: default; }
 
-  .chart-wrap{ margin-top:16px; }
+  .chart-wrap{ margin-top: 16px; }
   .chart-wrap svg{ width:100%; height:auto; display:block; overflow:visible; }
-  .chart-legend{ display:flex; gap:8px 18px; flex-wrap:wrap; margin-top:10px; font-size:12.5px; color: var(--ink-soft); }
-  .chart-legend span{ display:inline-flex; align-items:center; gap:6px; }
-  .chart-legend i{ width:16px; height:0; border-top:2px solid var(--ink); display:inline-block; }
-  .chart-legend i.band{ width:16px; height:8px; border-top:none; background: var(--ink-soft); opacity:.2; }
-  .chart-legend i.base{ border-top:2px dotted var(--ink-faint); }
-  .chart-legend i.kelly{ border-top: 2px dashed var(--ink); }
-  .chart-axes{ font-size: 12.5px; color: var(--ink-soft); margin: 6px 0 0; }
+  .chart-legend{ display:flex; gap: 8px 18px; flex-wrap: wrap; margin-top: 12px; font-size: 16px; color: var(--tinta-2); }
+  .chart-legend span{ display:inline-flex; align-items:center; gap: 8px; }
+  .chart-legend i{ width: 18px; height: 0; border-top: 3px solid var(--linha-media); display:inline-block; }
+  .chart-legend i.band{ height: 10px; border-top: 0; background: var(--tinta); opacity: .14; }
+  .chart-legend i.base{ border-top: 2px dotted var(--tinta-3); }
+  .chart-legend i.kelly{ border-top: 2px dashed var(--tinta); }
+  .chart-axes{ font-size: 16px; color: var(--tinta-2); margin: 8px 0 0; }
 
-  .mc-stats{ display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin-top:18px; padding-top:14px; border-top:1px solid var(--hair); }
-  @media (max-width:560px){ .mc-stats{ grid-template-columns: repeat(2,1fr); } }
-  .mc-notes{ margin: 10px 0 0; padding-left: 18px; font-size: 13px; color: var(--ink-soft); max-width: 70ch; }
+  .mc-stats{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px; padding-top: 16px; border-top: 2px solid var(--tinta); }
+  @media (max-width: 560px){ .mc-stats{ grid-template-columns: repeat(2, 1fr); } }
+  .mc-stats .k{ font-size: 16px; color: var(--tinta-2); font-weight: 700; line-height: 1.3; }
+  .mc-stats .v{ font-family: var(--display); font-size: 30px; font-weight: 800; line-height: 1.1; margin-top: 2px; }
+  .mc-stats .v.profit{ color: var(--ganho); }
+  .mc-stats .v.loss{ color: var(--casa); }
+  .mc-notes{ margin: 12px 0 0; padding-left: 20px; font-size: 16px; color: var(--tinta-2); max-width: 70ch; }
   .mc-notes:empty{ display:none; }
-  .mc-notes li{ margin-bottom: 3px; }
-  .mc-stats .k{ font-size:12px; color: var(--ink-soft); font-weight:600; line-height:1.3; }
-  .mc-stats .v{ font-size:17px; font-weight:600; margin-top:3px; font-family:'Newsreader',serif; }
-  .mc-stats .v.profit{ color: var(--profit); }
-  .mc-stats .v.loss{ color: var(--loss); }
+  .mc-notes li{ margin-bottom: 4px; }
 
-  .empty{ color: var(--ink-soft); font-size:14px; padding: 36px 4px; text-align:center; }
+  .empty{ color: var(--tinta-2); font-size: 16px; padding: 32px 4px; text-align:center; }
+  .mesa-nota{ margin: 28px 0 0; font-size: 16px; color: var(--feltro-texto-2); max-width: 60ch; }
 
-  .foot-note{ margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--line); font-size:13px; color: var(--ink-soft); max-width: 74ch; }
-  .foot-note p{ margin:0 0 6px; }
+  /* ---------- Sobre ---------- */
+  .sobre .wrap{ display:grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 48px; }
+  .sobre-corpo{ display:grid; grid-template-columns: 1fr 1fr; gap: 8px 40px; }
+  .sobre-corpo > p:first-child{ grid-column: 1 / -1; font-size: 20px; max-width: 60ch; }
+  .sobre h3{ margin: 8px 0 8px; }
+  .sobre ul{ padding-left: 20px; margin: 0 0 16px; }
+  .sobre li{ margin-bottom: 6px; }
+  .ajuda{ grid-column: 1 / -1; background: var(--papel-2); border-radius: 6px; padding: 20px 22px; margin-top: 16px; }
+  .ajuda h3{ margin-top: 0; }
+  .ajuda p{ margin: 0; max-width: 64ch; }
+  @media (max-width: 860px){ .sobre .wrap, .sobre-corpo{ grid-template-columns: 1fr; gap: 16px; } }
 
-  /* ---------- Sobre e rodapé ---------- */
-  .about h3{ font-size: 19px; margin: 22px 0 6px; }
-  .about p, .about li{ font-size: 15px; max-width: 70ch; }
-  .about ul{ padding-left: 20px; margin: 6px 0; }
-  .site-footer{ padding: 24px 0 0; font-size: 13px; color: var(--ink-soft); }
+  /* ---------- Rodapé ---------- */
+  .rodape{ background: var(--tinta); color: var(--papel); padding: 72px 0 32px; --logo-meiao: #FFFFFF; --logo-faixa: #0F5132; --logo-chuteira: var(--papel); --foco: var(--papel); }
+  :root[data-theme="dark"] .rodape{ background: #050A07; color: #EAF1EC; --logo-chuteira: #EAF1EC; }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .rodape{ background: #050A07; color: #EAF1EC; --logo-chuteira: #EAF1EC; } }
+  .rodape-marca{ display:flex; align-items:center; gap: clamp(12px, 2vw, 24px); }
+  .rodape-marca svg{ width: clamp(84px, 14vw, 180px); height:auto; flex: none; }
+  .rodape-marca{ flex-wrap: wrap; }
+  .rodape-marca span{ font-family: var(--display); font-weight: 900; font-size: clamp(46px, 10vw, 148px); line-height: .85; min-width: 0; overflow-wrap: anywhere; }
+  .rodape-info{ display:flex; justify-content:space-between; gap: 12px 32px; flex-wrap: wrap; margin-top: 40px; font-size: 16px; opacity: .85; }
+  .rodape-info p{ margin: 0; }
+
+  /* ---------- Movimento ---------- */
+  @media (prefers-reduced-motion: no-preference){
+    .abertura h1, .abertura-sub, .acoes, .aviso-curto{ animation: subir 560ms var(--ease-out) both; }
+    .abertura-sub{ animation-delay: 70ms; }
+    .acoes{ animation-delay: 140ms; }
+    .aviso-curto{ animation-delay: 210ms; }
+    .abertura .conta{ animation: imprimir 900ms var(--ease-out) 260ms both; }
+    /* Revelação ao rolar: só para o que começa fora da tela (classe posta pelo script). */
+    .revelar{ opacity: 0; transform: translateY(16px); transition: opacity 520ms var(--ease-out), transform 520ms var(--ease-out); transition-delay: var(--atraso, 0ms); }
+    .revelar.visto{ opacity: 1; transform: none; }
+  }
+  @keyframes subir{ from{ opacity: 0; transform: translateY(18px); } to{ opacity: 1; transform: none; } }
+  @keyframes imprimir{ from{ clip-path: inset(0 0 100% 0); } to{ clip-path: inset(0 0 0 0); } }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="simbolo" viewBox="0 0 132 92">
+    <path d="M20 -12 L50 44" stroke="var(--logo-meiao)" stroke-width="20" stroke-linecap="round" fill="none"/>
+    <path d="M20 -12 L50 44" stroke="var(--logo-faixa)" stroke-width="20" stroke-linecap="butt" fill="none" stroke-dasharray="0 22 6 4 6 200"/>
+    <path d="M38 40 C37 50 38 58 44 62 L86 64 C95 64 97 55 89 52 L66 44 C61 42 59 38 58 34 C52 33 44 35 38 40 Z" fill="var(--logo-chuteira)"/>
+    <rect x="47" y="62" width="6" height="6" rx="1.5" fill="var(--logo-chuteira)"/>
+    <rect x="61" y="62.5" width="6" height="6" rx="1.5" fill="var(--logo-chuteira)"/>
+    <rect x="75" y="63" width="6" height="6" rx="1.5" fill="var(--logo-chuteira)"/>
+    <g transform="translate(110 56)">
+      <circle r="20" fill="#B3261E"/>
+      <g fill="#FFFFFF">
+        <rect x="-3.4" y="-20" width="6.8" height="7.5" rx="1.4"/>
+        <rect x="-3.4" y="-20" width="6.8" height="7.5" rx="1.4" transform="rotate(60)"/>
+        <rect x="-3.4" y="-20" width="6.8" height="7.5" rx="1.4" transform="rotate(120)"/>
+        <rect x="-3.4" y="-20" width="6.8" height="7.5" rx="1.4" transform="rotate(180)"/>
+        <rect x="-3.4" y="-20" width="6.8" height="7.5" rx="1.4" transform="rotate(240)"/>
+        <rect x="-3.4" y="-20" width="6.8" height="7.5" rx="1.4" transform="rotate(300)"/>
+      </g>
+      <circle r="10" fill="none" stroke="#FFFFFF" stroke-width="2.4"/>
+    </g>
+    <path d="M92 40 L88 33 M100 36 L100 28 M84 45 L78 41" stroke="var(--logo-chuteira)" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+</svg>
 <a class="skip" href="#conteudo">Pular para o conteúdo</a>
 
-<header class="site-header">
+<header class="topo">
   <div class="wrap">
-    <a class="brand" href="#topo">Entenda as apostas</a>
-    <nav class="site-nav" aria-label="Seções do site">
+    <a class="marca" href="#inicio">
+      <svg viewBox="0 0 132 92" aria-hidden="true" focusable="false"><use href="#simbolo"/></svg>
+      <span>Conta da Casa</span>
+    </a>
+    <nav aria-label="Seções do site">
       <ul>
-        <li><a href="#assistente">Assistente</a></li>
+        <li><a href="#crupie">Crupiê</a></li>
         <li><a href="#simulador">Simulador</a></li>
         <li><a href="#sobre">Sobre</a></li>
       </ul>
@@ -327,207 +449,245 @@
   </div>
 </header>
 
-<main id="conteudo" class="wrap">
+<main id="conteudo">
 
   <!-- ===================== ABERTURA ===================== -->
-  <section class="hero" id="topo" aria-labelledby="t-hero">
-    <h1 id="t-hero">Entenda o que está por trás das apostas esportivas</h1>
-    <p class="sub">Tire dúvidas com um assistente e use o simulador para ver, com números, o que acontece com o dinheiro ao longo de várias apostas. Gratuito e sem cadastro.</p>
-    <span class="tag">Projeto educativo · não recomenda apostar</span>
-    <div class="cta">
-      <a class="btn primary" href="#assistente">Conversar com o assistente</a>
-      <a class="btn secondary" href="#simulador">Abrir o simulador</a>
+  <section class="abertura" id="inicio" aria-labelledby="t-abertura">
+    <div class="wrap">
+      <div>
+        <h1 id="t-abertura">A conta que a casa não mostra.</h1>
+        <p class="abertura-sub">Pergunte ao Crupiê sobre odds, probabilidades e riscos, e use o simulador para ver, com números, quanto do seu dinheiro fica com a casa. Gratuito e sem cadastro.</p>
+        <div class="acoes">
+          <a class="botao primario" href="#crupie">Falar com o Crupiê</a>
+          <a class="link-forte" href="#simulador">Abrir o simulador</a>
+        </div>
+        <p class="aviso-curto">Projeto educativo. Não recomenda apostar.</p>
+      </div>
+      <div class="abertura-mesa">
+        <figure class="conta">
+          <p class="conta-titulo">A conta de uma aposta</p>
+          <figcaption>Exemplo: R$ 100 na vitória do time da casa, odd 2,10, num jogo com odds 2,10, 3,30 e 3,40.</figcaption>
+          <dl class="conta-linhas">
+            <div><dt>Você aposta</dt><dd>R$ 100,00</dd></div>
+            <div><dt>Volta para você, em média</dt><dd>R$ 93,17</dd></div>
+            <div class="casa"><dt>Fica com a casa</dt><dd>R$ 6,83</dd></div>
+          </dl>
+          <p class="conta-rodape">Somando as chances embutidas nas três odds, o total dá 107,3%. Os 7,3% a mais são a margem da casa, cobrada em toda aposta.</p>
+        </figure>
+      </div>
     </div>
   </section>
 
-  <!-- ===================== ASSISTENTE ===================== -->
-  <section class="section" id="assistente" aria-labelledby="t-assistente">
-    <h2 id="t-assistente">Tire suas dúvidas</h2>
-    <p class="lead">Pergunte do seu jeito sobre odds, probabilidades, riscos e os comportamentos que influenciam as decisões. As respostas vêm da base de conhecimento do projeto e indicam as fontes.</p>
-    <div class="bot-frame">
-      <typebot-standard id="assistente-bot"></typebot-standard>
-      <p id="bot-aviso" class="bot-aviso" role="status" hidden></p>
+  <!-- ===================== CRUPIÊ (assistente) ===================== -->
+  <section class="secao crupie" id="crupie" aria-labelledby="t-crupie">
+    <div class="wrap">
+      <div class="crupie-texto">
+        <h2 id="t-crupie">Pergunte ao Crupiê</h2>
+        <p>No cassino, o crupiê é quem comanda a mesa. Aqui, ele mostra como a casa ganha: odds, probabilidades, riscos e os vieses que pesam nas decisões. Pergunte do seu jeito.</p>
+        <p class="nota-pequena">O Crupiê é uma inteligência artificial e pode errar. As respostas vêm da base de conhecimento do projeto e indicam as fontes. As mensagens passam pelo Typebot e pelo provedor do modelo de IA, então não compartilhe dados pessoais.</p>
+      </div>
+      <div class="chat-moldura" data-ui>
+        <typebot-standard id="assistente-bot"></typebot-standard>
+        <p id="bot-aviso" class="bot-aviso" role="status" hidden></p>
+      </div>
     </div>
-    <p class="small">O assistente é uma inteligência artificial e pode errar. As mensagens são processadas por serviços externos (Typebot e o provedor do modelo de IA), por isso não compartilhe dados pessoais.</p>
   </section>
 
-  <!-- ===================== SIMULADOR ===================== -->
-  <section class="section" id="simulador" aria-labelledby="t-simulador">
-    <h2 id="t-simulador">Simulador: quanto essa aposta realmente vale?</h2>
-    <p class="lead">Probabilidade, valor esperado e risco, a partir das odds que a casa oferece.</p>
-    <span class="tag">Ferramenta informativa · não recomenda apostar</span>
+  <!-- ===================== A MESA (simulador) ===================== -->
+  <section class="mesa" id="simulador" aria-labelledby="t-simulador">
+    <div class="wrap">
+      <h2 id="t-simulador">Faça a conta da sua aposta</h2>
+      <p class="mesa-sub">Probabilidade, valor esperado e risco, a partir das odds que a casa oferece. É uma ferramenta informativa: não recomenda apostar.</p>
 
-    <h3 class="sr-only">Como usar</h3>
-    <ol class="howto" style="margin-top:16px;">
-      <li>Informe sua banca (o dinheiro disponível) e quanto apostaria em cada rodada.</li>
-      <li>Digite as odds de <strong>todos</strong> os resultados possíveis do jogo (com vírgula ou ponto, como 2,10) e escolha em qual você apostaria.</li>
-      <li>Veja o valor esperado, o risco e, na simulação, o que pode acontecer com a banca depois de várias apostas.</li>
-    </ol>
+      <div class="mesa-intro">
+        <div>
+          <h3 class="sr-only">Como usar</h3>
+          <ol class="howto">
+            <li>Informe sua banca (o dinheiro disponível) e quanto apostaria em cada rodada.</li>
+            <li>Digite as odds de <strong>todos</strong> os resultados possíveis do jogo (com vírgula ou ponto, como 2,10) e escolha em qual você apostaria.</li>
+            <li>Veja o valor esperado, o risco e, na simulação, o que pode acontecer com a banca depois de várias apostas.</li>
+          </ol>
+        </div>
+        <details class="glossario">
+          <summary>Glossário: o que significa cada termo</summary>
+          <dl>
+            <dt>Odd</dt>
+            <dd>Quanto a casa devolve para cada R$ 1 apostado se você acertar, já incluindo o próprio R$ 1. Com odd 2,50, uma aposta de R$ 10 devolve R$ 25 (lucro de R$ 15).</dd>
+            <dt>Probabilidade implícita</dt>
+            <dd>É 1 dividido pela odd. Somando as probabilidades implícitas de todos os resultados, o total passa de 100%. O simulador divide cada uma por essa soma para estimar a probabilidade sem a margem da casa.</dd>
+            <dt>Margem da casa</dt>
+            <dd>Quanto essa soma passa de 100%. É a vantagem da casa embutida nas odds.</dd>
+            <dt>Valor esperado</dt>
+            <dd>O ganho ou a perda média por aposta, se a mesma aposta fosse repetida muitas vezes. Não é uma previsão do resultado de uma aposta específica.</dd>
+            <dt>Risco (desvio-padrão)</dt>
+            <dd>O quanto o resultado de uma aposta costuma se afastar da média. Quanto maior, mais o resultado "balança" entre ganhos e perdas.</dd>
+            <dt>Simulação de Monte Carlo</dt>
+            <dd>O computador sorteia centenas de sequências de apostas, respeitando a probabilidade usada, para mostrar a faixa de resultados possíveis.</dd>
+            <dt>Critério de Kelly</dt>
+            <dd>Fórmula que calcula a fração da banca que faria a banca crescer mais rápido no longo prazo, <em>se</em> a probabilidade informada estivesse correta. Com a probabilidade tirada das próprias odds, o resultado é não apostar. Aqui ele serve só para comparação: não é uma recomendação.</dd>
+            <dt>Ficar sem dinheiro para apostar</dt>
+            <dd>Na simulação, quando a banca fica menor que o valor da aposta, não é possível apostar de novo, e a banca para ali.</dd>
+          </dl>
+        </details>
+      </div>
 
-    <details class="glossario">
-      <summary>Glossário: o que significa cada termo</summary>
-      <dl>
-        <dt>Odd</dt>
-        <dd>Quanto a casa devolve para cada R$ 1 apostado se você acertar, já incluindo o próprio R$ 1. Com odd 2,50, uma aposta de R$ 10 devolve R$ 25 (lucro de R$ 15).</dd>
-        <dt>Probabilidade implícita</dt>
-        <dd>É 1 dividido pela odd. Somando as probabilidades implícitas de todos os resultados, o total passa de 100%. O simulador divide cada uma por essa soma para estimar a probabilidade sem a margem da casa.</dd>
-        <dt>Margem da casa</dt>
-        <dd>Quanto essa soma passa de 100%. É a vantagem da casa embutida nas odds.</dd>
-        <dt>Valor esperado</dt>
-        <dd>O ganho ou a perda média por aposta, se a mesma aposta fosse repetida muitas vezes. Não é uma previsão do resultado de uma aposta específica.</dd>
-        <dt>Risco (desvio-padrão)</dt>
-        <dd>O quanto o resultado de uma aposta costuma se afastar da média. Quanto maior, mais o resultado "balança" entre ganhos e perdas.</dd>
-        <dt>Simulação de Monte Carlo</dt>
-        <dd>O computador sorteia centenas de sequências de apostas, respeitando a probabilidade usada, para mostrar a faixa de resultados possíveis.</dd>
-        <dt>Critério de Kelly</dt>
-        <dd>Fórmula que calcula a fração da banca que faria a banca crescer mais rápido no longo prazo, <em>se</em> a probabilidade informada estivesse correta. Com a probabilidade tirada das próprias odds, o resultado é não apostar. Aqui ele serve só para comparação: não é uma recomendação.</dd>
-        <dt>Ficar sem dinheiro para apostar</dt>
-        <dd>Na simulação, quando a banca fica menor que o valor da aposta, não é possível apostar de novo, e a banca para ali.</dd>
-      </dl>
-    </details>
-
-    <div class="grid">
-      <!-- ENTRADAS -->
-      <div>
-        <div class="input-card">
-          <h3>Sua banca</h3>
-          <div class="field">
-            <label for="banca">Banca atual (R$)</label>
-            <input type="text" inputmode="decimal" autocomplete="off" id="banca" value="1.000" aria-describedby="erro-banca">
-            <p class="erro" id="erro-banca" hidden></p>
-          </div>
-          <div class="field">
-            <span class="label" id="lbl-modo">Como você quer apostar?</span>
-            <div class="seg" role="group" aria-labelledby="lbl-modo">
-              <button type="button" class="active" data-mode="valor" aria-pressed="true">Valor fixo (R$)</button>
-              <button type="button" data-mode="pct" aria-pressed="false">% da banca</button>
+      <div class="grid">
+        <!-- ENTRADAS -->
+        <div>
+          <div class="input-card">
+            <h3>Sua banca</h3>
+            <div class="field">
+              <label for="banca">Banca atual (R$)</label>
+              <input type="text" inputmode="decimal" autocomplete="off" id="banca" value="1.000" aria-describedby="erro-banca">
+              <p class="erro" id="erro-banca" hidden></p>
+            </div>
+            <div class="field">
+              <span class="label" id="lbl-modo">Como você quer apostar?</span>
+              <div class="seg" role="group" aria-labelledby="lbl-modo">
+                <button type="button" class="active" data-mode="valor" aria-pressed="true">Valor fixo (R$)</button>
+                <button type="button" data-mode="pct" aria-pressed="false">% da banca</button>
+              </div>
+            </div>
+            <div class="field" id="campo-valor">
+              <label for="valorFixo">Valor da aposta (R$)</label>
+              <input type="text" inputmode="decimal" autocomplete="off" id="valorFixo" value="100" aria-describedby="erro-valor">
+              <p class="erro" id="erro-valor" hidden></p>
+            </div>
+            <div class="field" id="campo-pct" style="display:none">
+              <label for="valorPct">Percentual da banca (%)</label>
+              <input type="text" inputmode="decimal" autocomplete="off" id="valorPct" value="10" aria-describedby="erro-pct">
+              <p class="erro" id="erro-pct" hidden></p>
             </div>
           </div>
-          <div class="field" id="campo-valor" style="margin-top:12px;">
-            <label for="valorFixo">Valor da aposta (R$)</label>
-            <input type="text" inputmode="decimal" autocomplete="off" id="valorFixo" value="100" aria-describedby="erro-valor">
-            <p class="erro" id="erro-valor" hidden></p>
+
+          <div class="input-card">
+            <h3>O mercado</h3>
+            <p class="hint">Odds de todos os resultados possíveis, não só do que você quer apostar.</p>
+            <div class="outcome-head" aria-hidden="true"><span>Resultado</span><span>Odd</span><span></span></div>
+            <div id="outcomes" class="outcomes"></div>
+            <p class="erro" id="erro-mercado" hidden></p>
+            <button type="button" class="add-outcome" id="addOutcome">+ adicionar resultado</button>
+
+            <fieldset class="pick">
+              <legend>Em qual resultado você apostaria?</legend>
+              <div class="radiogroup" id="pickOutcome"></div>
+            </fieldset>
           </div>
-          <div class="field" id="campo-pct" style="display:none; margin-top:12px;">
-            <label for="valorPct">Percentual da banca (%)</label>
-            <input type="text" inputmode="decimal" autocomplete="off" id="valorPct" value="10" aria-describedby="erro-pct">
-            <p class="erro" id="erro-pct" hidden></p>
+
+          <div class="input-card">
+            <details class="advanced" id="advancedBox">
+              <summary>Avançado: usar minha própria probabilidade</summary>
+              <div class="body">
+                <div class="checkline">
+                  <input type="checkbox" id="useOwnP">
+                  <label for="useOwnP">Tenho uma razão concreta para achar que minha probabilidade é diferente da odd</label>
+                </div>
+                <div class="field" id="campo-ownP" style="display:none">
+                  <label for="ownP" id="lbl-ownp">Sua probabilidade estimada (%)</label>
+                  <input type="text" inputmode="decimal" autocomplete="off" id="ownP" value="44,4" aria-describedby="erro-ownp">
+                  <p class="erro" id="erro-ownp" hidden></p>
+                </div>
+                <p class="note">Por padrão, usamos a probabilidade implícita nas odds (sem a margem da casa). Com ela, o critério de Kelly sempre indica não apostar. Isso só muda se você informar uma probabilidade própria, e só faria sentido com uma razão concreta para isso.</p>
+              </div>
+            </details>
           </div>
         </div>
 
-        <div class="input-card">
-          <h3>O mercado</h3>
-          <p class="hint">Odds de todos os resultados possíveis, não só do que você quer apostar.</p>
-          <div class="outcome-head" aria-hidden="true"><span>Resultado</span><span>Odd</span><span></span></div>
-          <div id="outcomes" class="outcomes"></div>
-          <p class="erro" id="erro-mercado" hidden></p>
-          <button type="button" class="add-outcome" id="addOutcome">+ adicionar resultado</button>
+        <!-- RESULTADOS -->
+        <div>
+          <p id="resumo-falado" class="sr-only" aria-live="polite"></p>
 
-          <fieldset class="pick">
-            <legend>Em qual resultado você apostaria?</legend>
-            <div class="radiogroup" id="pickOutcome"></div>
-          </fieldset>
-        </div>
+          <div class="block" id="resultsCard"></div>
 
-        <div class="input-card">
-          <details class="advanced" id="advancedBox">
-            <summary>Avançado: usar minha própria probabilidade</summary>
-            <div class="body">
-              <div class="checkline">
-                <input type="checkbox" id="useOwnP">
-                <label for="useOwnP">Tenho uma razão concreta para achar que minha probabilidade é diferente da odd</label>
-              </div>
-              <div class="field" id="campo-ownP" style="display:none">
-                <label for="ownP" id="lbl-ownp">Sua probabilidade estimada (%)</label>
-                <input type="text" inputmode="decimal" autocomplete="off" id="ownP" value="44,4" aria-describedby="erro-ownp">
-                <p class="erro" id="erro-ownp" hidden></p>
-              </div>
-              <p class="note">Por padrão, usamos a probabilidade implícita nas odds (sem a margem da casa). Com ela, o critério de Kelly sempre indica não apostar. Isso só muda se você informar uma probabilidade própria, e só faria sentido com uma razão concreta para isso.</p>
+          <div class="block" id="blocoKelly">
+            <h3 id="t-kelly">Sua aposta e o critério de Kelly</h3>
+            <div class="table-scroll" role="region" aria-labelledby="t-kelly" tabindex="0">
+              <table class="compare" id="compareTable"></table>
             </div>
-          </details>
+          </div>
+
+          <div class="block" id="blocoMC">
+            <div class="mc-head">
+              <div>
+                <h3 id="t-mc">Simulação de Monte Carlo</h3>
+                <p class="hint" style="margin-bottom:0;">300 trajetórias possíveis da sua banca.</p>
+              </div>
+              <div class="mc-controls">
+                <div class="field">
+                  <label for="nApostas">Nº de apostas (5 a 150)</label>
+                  <input type="text" inputmode="numeric" autocomplete="off" id="nApostas" value="30" aria-describedby="erro-n">
+                  <p class="erro" id="erro-n" hidden></p>
+                </div>
+                <button type="button" class="rerun-btn" id="rerunMC">Rodar novamente</button>
+              </div>
+            </div>
+            <div id="mcCorpo">
+              <div class="chart-wrap" id="mcChartWrap"></div>
+              <div class="chart-legend">
+                <span><i class="base"></i> Banca inicial</span>
+                <span><i class="band"></i> Faixa entre o menor e o maior valor simulado a cada aposta (sua aposta)</span>
+                <span><i></i> Banca média: sua aposta</span>
+                <span><i class="kelly"></i> Banca média: critério de Kelly</span>
+              </div>
+              <p class="chart-axes">Eixo vertical: banca em reais (k = mil). Eixo horizontal: número de apostas.</p>
+              <div class="mc-stats" id="mcStats"></div>
+              <ul class="mc-notes" id="mcNotes"></ul>
+              <p class="hint" style="margin:18px 0 6px;">Depois de <span id="mcNLabel">30</span> apostas seguidas, nessas mesmas condições:</p>
+              <div class="table-scroll" role="region" aria-labelledby="t-mc" tabindex="0">
+                <table class="compare" id="mcCompareTable"></table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- RESULTADOS -->
-      <div>
-        <p id="resumo-falado" class="sr-only" aria-live="polite"></p>
-
-        <div class="block" id="resultsCard"></div>
-
-        <div class="block" id="blocoKelly">
-          <h3 id="t-kelly">Sua aposta vs. Critério de Kelly</h3>
-          <div class="table-scroll" role="region" aria-labelledby="t-kelly" tabindex="0">
-            <table class="compare" id="compareTable"></table>
-          </div>
-        </div>
-
-        <div class="block" id="blocoMC">
-          <div class="mc-head">
-            <div>
-              <h3 id="t-mc">Simulação de Monte Carlo</h3>
-              <p class="hint" style="margin-bottom:0;">300 trajetórias possíveis da sua banca.</p>
-            </div>
-            <div class="mc-controls">
-              <div class="field">
-                <label for="nApostas">Nº de apostas (5 a 150)</label>
-                <input type="text" inputmode="numeric" autocomplete="off" id="nApostas" value="30" aria-describedby="erro-n">
-                <p class="erro" id="erro-n" hidden></p>
-              </div>
-              <button type="button" class="rerun-btn" id="rerunMC">Rodar novamente</button>
-            </div>
-          </div>
-          <div id="mcCorpo">
-          <div class="chart-wrap" id="mcChartWrap"></div>
-          <div class="chart-legend">
-            <span><i class="base"></i> Banca inicial</span>
-            <span><i class="band"></i> Faixa entre o menor e o maior valor simulado a cada aposta (sua aposta)</span>
-            <span><i></i> Banca média: sua aposta</span>
-            <span><i class="kelly"></i> Banca média: se seguisse o Critério de Kelly</span>
-          </div>
-          <p class="chart-axes">Eixo vertical: banca em reais (k = mil). Eixo horizontal: número de apostas.</p>
-          <div class="mc-stats" id="mcStats"></div>
-          <ul class="mc-notes" id="mcNotes"></ul>
-          <p class="hint" style="margin:16px 0 6px;">Depois de <span id="mcNLabel">30</span> apostas seguidas, nessas mesmas condições:</p>
-          <div class="table-scroll" role="region" aria-labelledby="t-mc" tabindex="0">
-            <table class="compare" id="mcCompareTable"></table>
-          </div>
-          </div>
-        </div>
-
-        <div class="foot-note">
-          <p>A probabilidade "real" é aproximada removendo a margem da casa das odds. Não é a probabilidade verdadeira: é a melhor estimativa disponível sem informação privilegiada. A simulação de Monte Carlo não prevê o futuro: mostra a gama de resultados possíveis sob as mesmas premissas, repetidas centenas de vezes.</p>
-        </div>
-      </div>
+      <p class="mesa-nota">A probabilidade "real" é aproximada removendo a margem da casa das odds. Não é a probabilidade verdadeira: é a melhor estimativa disponível sem informação privilegiada. A simulação de Monte Carlo não prevê o futuro: mostra a gama de resultados possíveis sob as mesmas premissas, repetidas centenas de vezes.</p>
     </div>
   </section>
 
   <!-- ===================== SOBRE ===================== -->
-  <section class="section about" id="sobre" aria-labelledby="t-sobre">
-    <h2 id="t-sobre">Sobre o projeto</h2>
-    <p>Este site é um projeto acadêmico da disciplina Projetos III, do curso de graduação em Economia. Tem finalidade exclusivamente educativa: não incentiva apostas, não indica apostas e não oferece aconselhamento financeiro, psicológico ou jurídico.</p>
-
-    <h3>Como funciona</h3>
-    <ul>
-      <li><strong>Assistente:</strong> construído no Typebot. Um modelo de linguagem responde com base na base de conhecimento organizada pelo grupo e indica as fontes usadas.</li>
-      <li><strong>Simulador:</strong> todos os cálculos acontecem no seu próprio navegador. Os valores que você digita não são enviados nem guardados.</li>
-    </ul>
-
-    <h3>Limitações</h3>
-    <ul>
-      <li>A probabilidade usada no simulador é uma estimativa a partir das odds, não a chance verdadeira do evento.</li>
-      <li>A simulação supõe apostas independentes entre si, sempre com as mesmas odds.</li>
-      <li>O assistente pode errar ou deixar de encontrar uma resposta. Confira as fontes indicadas.</li>
-    </ul>
-
-    <h3>Precisa de ajuda?</h3>
-    <p>Se as apostas estão trazendo prejuízo, dívidas ou angústia, procure apoio profissional. A rede pública de saúde (SUS) pode orientar, a partir da Unidade Básica de Saúde mais próxima.</p>
+  <section class="secao sobre" id="sobre" aria-labelledby="t-sobre">
+    <div class="wrap">
+      <h2 id="t-sobre">Sobre o projeto</h2>
+      <div class="sobre-corpo">
+        <p>A Conta da Casa é um projeto acadêmico da disciplina Projetos III, do curso de graduação em Economia. Tem finalidade exclusivamente educativa: não incentiva apostas, não indica apostas e não oferece aconselhamento financeiro, psicológico ou jurídico.</p>
+        <div>
+          <h3>Como funciona</h3>
+          <ul>
+            <li><strong>Crupiê:</strong> assistente construído no Typebot. Um modelo de linguagem responde com base na base de conhecimento organizada pelo grupo e indica as fontes usadas.</li>
+            <li><strong>Simulador:</strong> todos os cálculos acontecem no seu próprio navegador. Os valores que você digita não são enviados nem guardados.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Limitações</h3>
+          <ul>
+            <li>A probabilidade usada no simulador é uma estimativa a partir das odds, não a chance verdadeira do evento.</li>
+            <li>A simulação supõe apostas independentes entre si, sempre com as mesmas odds.</li>
+            <li>O Crupiê pode errar ou deixar de encontrar uma resposta. Confira as fontes indicadas.</li>
+          </ul>
+        </div>
+        <div class="ajuda">
+          <h3>Precisa de ajuda?</h3>
+          <p>Se as apostas estão trazendo prejuízo, dívidas ou angústia, procure apoio profissional. A rede pública de saúde (SUS) pode orientar, a partir da Unidade Básica de Saúde mais próxima.</p>
+        </div>
+      </div>
+    </div>
   </section>
-
-  <footer class="site-footer">
-    <!-- EDITE AQUI: se quiser, troque a linha abaixo pelo nome do grupo e dos integrantes. -->
-    <p>Projeto acadêmico · Projetos III · Graduação em Economia · 2026</p>
-  </footer>
 </main>
+
+<footer class="rodape">
+  <div class="wrap">
+    <div class="rodape-marca">
+      <svg viewBox="0 0 132 92" aria-hidden="true" focusable="false"><use href="#simbolo"/></svg>
+      <span>Conta da Casa</span>
+    </div>
+    <div class="rodape-info">
+      <!-- EDITE AQUI: se quiser, troque a linha abaixo pelo nome do grupo e dos integrantes. -->
+      <p>Projeto acadêmico de Projetos III, graduação em Economia, 2026.</p>
+      <p>Educativo e gratuito. Não recomenda apostar.</p>
+    </div>
+  </div>
+</footer>
 
 <!-- =========================================================
      ASSISTENTE: conexão com o Typebot
@@ -858,6 +1018,14 @@
     };
   }
 
+  // Copia o nome de cada coluna para as células, usado no layout empilhado do celular.
+  function rotularTabela(tabela){
+    const nomes = [...tabela.querySelectorAll('thead th')].map(th => th.textContent.trim());
+    tabela.querySelectorAll('tbody tr').forEach(tr => {
+      [...tr.children].forEach((cel, i) => { if(cel.tagName === 'TD') cel.setAttribute('data-label', nomes[i] || ''); });
+    });
+  }
+
   function limparResultados(msg){
     resultsCard.innerHTML = `<div class="empty" role="status">${msg}</div>`;
     compareTable.innerHTML = '';
@@ -917,8 +1085,13 @@
          </details>`;
 
     resultsCard.innerHTML = `
-      <h3>O que isso significa</h3>
-      <p class="hint">Aposta em "<strong>${esc(m.outcomeLabel)}</strong>", odd ${fmtNum(m.O, 2)}, aposta de ${fmtMoney(m.user.stake)}.</p>
+      <h3>A conta desta aposta</h3>
+      <p class="hint">Aposta em "<strong>${esc(m.outcomeLabel)}</strong>", odd ${fmtNum(m.O, 2)}.</p>
+
+      <dl class="conta-linhas">
+        <div><dt>Você aposta</dt><dd>${fmtMoney(m.user.stake)}</dd></div>
+        <div><dt>Volta para você, em média</dt><dd>${fmtMoney(m.user.stake + m.user.EV)}</dd></div>
+      </dl>
 
       <div class="hero-number">
         <div class="k">Valor esperado desta aposta</div>
@@ -968,6 +1141,7 @@
       </tbody>
     `;
 
+    rotularTabela(compareTable);
     renderMonteCarlo(m);
 
     anunciar(`Resultado atualizado. Valor esperado desta aposta: ${fmtMoney(m.user.EV)}, ${pillTexto.toLowerCase()}. Probabilidade usada: ${fmtPct(m.p)}. Margem da casa: ${fmtPct(m.margin)}. Na simulação, banca média final: ${fmtMoney(lastSim.su.meanFinal)}.`);
@@ -1097,6 +1271,7 @@
         </tr>
       </tbody>
     `;
+    rotularTabela($('#mcCompareTable'));
   }
 
   // Desenha o gráfico a partir da última simulação. Separado da simulação
@@ -1167,14 +1342,14 @@
         <style>
           .mc-line{ fill:none; stroke: var(--ink); stroke-width:1; opacity:.08; }
           .mc-grid{ stroke: var(--hair); stroke-width:1; }
-          .mc-axistext{ font: 12px 'IBM Plex Sans', sans-serif; fill: var(--ink-soft); }
+          .mc-axistext{ font: 12px 'Figtree', system-ui, sans-serif; fill: var(--ink-soft); }
         </style>
         ${yTicks}
         <path d="${bandPath}" fill="var(--ink)" opacity="0.06" stroke="none"/>
         ${faintPaths}
         <line x1="${padL}" y1="${baseY}" x2="${W-padR}" y2="${baseY}" stroke="var(--ink-faint)" stroke-width="1.5" stroke-dasharray="1 3"/>
         <path d="${meanPathKelly}" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="5 3"/>
-        <path d="${meanPathUser}" fill="none" stroke="var(--ink)" stroke-width="2.4"/>
+        <path d="${meanPathUser}" fill="none" stroke="var(--linha-media)" stroke-width="2.8"/>
         ${xTicks}
       </svg>
     `;
@@ -1200,6 +1375,34 @@
   renderOutcomes();
   renderPicker();
   recalc();
+})();
+
+// Revelação suave das seções ao rolar a página. Sem script, ou com "reduzir movimento", tudo já aparece.
+(() => {
+  if (!('IntersectionObserver' in window)) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const grupos = [
+    '.crupie-texto > *', '.chat-moldura',
+    '.mesa h2, .mesa-sub', '.mesa-intro > *',
+    '.grid > *', '.mesa-nota',
+    '.sobre h2', '.sobre-corpo > *'
+  ];
+  const io = new IntersectionObserver((entradas) => {
+    for (const e of entradas) {
+      if (!e.isIntersecting) continue;
+      e.target.classList.add('visto');
+      io.unobserve(e.target);
+    }
+  }, { rootMargin: '0px 0px -10% 0px' });
+  for (const seletor of grupos) {
+    let i = 0;
+    for (const el of document.querySelectorAll(seletor)) {
+      if (el.getBoundingClientRect().top < window.innerHeight) continue; // já está na tela: não esconde
+      el.style.setProperty('--atraso', Math.min(i++, 3) * 70 + 'ms');
+      el.classList.add('revelar');
+      io.observe(el);
+    }
+  }
 })();
 </script>
 </body>

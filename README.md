@@ -1,9 +1,11 @@
-# Entenda as apostas esportivas: assistente e simulador
+# Conta da Casa
+
+A conta que a casa não mostra: um assistente e um simulador para entender quanto do dinheiro apostado fica com a casa.
 
 Projeto acadêmico da disciplina **Projetos III** (graduação em Economia, 2º semestre de 2026).
 Site educativo que reúne:
 
-- **Assistente de IA** (feito no Typebot), que responde dúvidas sobre apostas esportivas com base na base de conhecimento do grupo e indica as fontes;
+- **Crupiê**, o assistente de IA (feito no Typebot), que responde dúvidas sobre apostas esportivas com base na base de conhecimento do grupo e indica as fontes;
 - **Simulador financeiro**, que calcula probabilidade implícita, margem da casa, valor esperado, risco (desvio-padrão), critério de Kelly e uma simulação de Monte Carlo com 300 trajetórias.
 
 O site não incentiva apostas e não oferece aconselhamento financeiro, psicológico ou jurídico.
@@ -19,7 +21,7 @@ O site não incentiva apostas e não oferece aconselhamento financeiro, psicoló
 
 - **Hospedagem:** GitHub Pages (gratuito para repositórios públicos). O GitHub entrega o `index.html` para quem acessa o link.
 - **Simulador:** roda inteiramente no navegador de quem acessa (JavaScript). Nenhum valor digitado é enviado para servidor algum.
-- **Assistente:** o `index.html` carrega o widget oficial do Typebot (`@typebot.io/js`). A conversa acontece nos servidores do Typebot e do provedor do modelo de IA, não no GitHub.
+- **Crupiê (assistente):** o `index.html` carrega o widget oficial do Typebot (`@typebot.io/js`). A conversa acontece nos servidores do Typebot e do provedor do modelo de IA, não no GitHub.
 
 ## Como o assistente está conectado
 
@@ -30,6 +32,15 @@ O `index.html` carrega o bot publicado em `https://typebot.co/my-typebot-grcdism
 3. No `index.html`, procure `const TYPEBOT_ID =` e substitua o valor entre aspas pelo novo.
 
 Mudanças feitas dentro do Typebot (textos, base de conhecimento, instruções) aparecem no site sem mexer neste repositório, desde que você clique em **Publish** no Typebot.
+
+## Identidade visual
+
+- **Nome:** Conta da Casa. **Assistente:** Crupiê.
+- **Logo:** uma perna chutando uma ficha de pôquer como se fosse uma bola de futebol (desenhada em SVG dentro do `index.html`).
+- **Cores:** branco e tinta escura para leitura; verde de feltro (`#0F5132`) como fundo do simulador, a "mesa"; vermelho (`#B3261E`) só para a margem da casa e para perdas. O site também tem tema escuro, que segue a configuração do aparelho.
+- **Fontes (Google Fonts, gratuitas):** Big Shoulders Display nos títulos e números grandes; Figtree nos textos.
+- **Movimento:** discreto (entrada do topo, recibo "impresso" e revelação das seções ao rolar) e desligado para quem ativa "reduzir movimento" no aparelho.
+- Não há fotos de apostas, cassinos ou estádios, para não deixar o tema atraente.
 
 ## Cálculos do simulador
 
