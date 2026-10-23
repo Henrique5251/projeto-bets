@@ -224,9 +224,14 @@
   .como-usar{ margin: 0; max-width: 52ch; }
   .como-usar p{ margin: 0 0 10px; }
   .como-usar p:last-child{ margin-bottom: 0; }
-  .dica-exemplo{ display:inline-flex; align-items:center; justify-content:center; width: 22px; height: 22px; border-radius: 999px; background: #FFFFFF; color: var(--feltro); font-size: 14px; font-weight: 700; line-height: 1; vertical-align: 2px; }
+  .dica-exemplo{ display:inline-flex; align-items:center; justify-content:center; width: 18px; height: 18px; border-radius: 999px; background: rgba(255, 255, 255, 0.85); color: var(--feltro); font-size: 12px; font-weight: 700; line-height: 1; vertical-align: 2px; }
   details.glossario{ background: var(--superficie); color: var(--tinta); border-radius: 10px; padding: 14px 20px; --foco: var(--tinta); }
-  details.glossario summary{ cursor:pointer; font-weight:700; min-height: 32px; display:flex; align-items:center; }
+  details.glossario summary{ cursor:pointer; font-weight:700; min-height: 32px; display:flex; align-items:center; gap: 12px; list-style: none; }
+  details.glossario summary::-webkit-details-marker{ display: none; }
+  /* Mostra que o glossário abre com um clique. */
+  details.glossario summary::after{ content: "Abrir ▾"; margin-left: auto; flex: none; padding: 4px 12px; border-radius: 999px; background: rgba(15, 81, 50, 0.12); color: var(--feltro); font-size: 15px; font-weight: 700; white-space: nowrap; }
+  details.glossario[open] summary::after{ content: "Fechar ▴"; }
+  @media (hover: hover) and (pointer: fine){ details.glossario summary:hover::after{ background: rgba(15, 81, 50, 0.22); } }
   details.glossario dl{ margin: 12px 0 4px; font-size: 16px; }
   details.glossario dt{ font-weight:700; margin-top: 12px; }
   details.glossario dd{ margin: 2px 0 0; color: var(--tinta-2); }
@@ -315,14 +320,18 @@
   .titulo-dica h3, .titulo-dica .passo-titulo{ margin-bottom: 0; }
   .mc-head .titulo-dica{ margin-bottom: 6px; }
   .dica-wrap{ position: relative; display: inline-flex; vertical-align: middle; margin-left: 8px; font-family: var(--texto); font-size: 16px; font-weight: 400; line-height: 1.45; letter-spacing: 0; text-transform: none; }
+  /* Área de toque de 24px; o círculo visível é menor e verde-transparente. */
   .dica{
-    flex: none; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 999px;
-    background: var(--feltro); color: #FFFFFF; font: 700 14px/1 var(--texto); cursor: pointer;
+    position: relative; flex: none; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 999px;
+    background: transparent; color: var(--feltro); font: 700 12px/1 var(--texto); cursor: pointer;
     display:inline-flex; align-items:center; justify-content:center;
-    transition: transform 160ms var(--ease-out), background-color 160ms ease;
+    transition: transform 160ms var(--ease-out);
   }
+  .dica::before{ content: ""; position: absolute; inset: 3px; z-index: -1; border-radius: 999px; background: rgba(15, 81, 50, 0.12); border: 1px solid rgba(15, 81, 50, 0.4); transition: background-color 160ms ease; }
+  .dica{ isolation: isolate; }
+  @media (hover: hover) and (pointer: fine){ .dica:hover::before{ background: rgba(15, 81, 50, 0.22); } }
   .dica:active{ transform: scale(0.94); }
-  .dica[aria-expanded="true"]{ background: var(--tinta); }
+  .dica[aria-expanded="true"]::before{ background: rgba(15, 81, 50, 0.28); }
   .dica-balao{
     display: none; position: absolute; z-index: 30; top: calc(100% + 10px); left: 50%;
     transform: translateX(calc(-50% + var(--x, 0px))); width: min(300px, calc(100vw - 32px));
@@ -558,7 +567,7 @@
       <div class="mesa-intro">
         <div class="como-usar">
           <p><strong>Como usar:</strong> preencha os três passos do quadro <strong>Seus dados</strong>: sua banca, o mercado (as odds do jogo) e o resultado em que você apostaria. Os resultados aparecem na hora, sem botão de calcular.</p>
-          <p><strong>Não conhece algum termo?</strong> Toque no <span class="dica-exemplo" aria-hidden="true">?</span> ao lado dele, abra o Glossário ou pergunte ao Crupiê, no chat acima.</p>
+          <p><strong>Não conhece algum termo?</strong> Toque no <span class="dica-exemplo" aria-hidden="true">?</span> ao lado dele para uma explicação rápida. Para entender melhor, pergunte ao Crupiê, no chat acima, ou abra o Glossário.</p>
         </div>
         <details class="glossario" id="glossario">
           <summary>Glossário: o que significa cada termo</summary>
@@ -840,7 +849,7 @@
     const id = 'dica-' + chave + '-' + (++dicaN);
     return `<span class="dica-wrap"><button type="button" class="dica" aria-expanded="false" aria-controls="${id}" aria-label="O que é ${termo}?">?</button>`
       + `<span class="dica-balao" id="${id}"><span class="dica-texto">${texto}</span>`
-      + `<span class="dica-mais">Saiba mais no <button type="button" data-acao="glossario">Glossário</button> ou <a href="#crupie">pergunte ao Crupiê</a>.</span></span></span>`;
+      + `<span class="dica-mais">Esta é só uma explicação rápida. Para entender melhor, <a href="#crupie">pergunte ao Crupiê</a> ou veja o <button type="button" data-acao="glossario">Glossário</button>.</span></span></span>`;
   }
   document.querySelectorAll('.dica-slot').forEach(s => { s.outerHTML = dica(s.dataset.dica); });
   const compareTable = $('#compareTable');
