@@ -222,6 +222,9 @@
   .mesa-sub{ font-size: 20px; max-width: 52ch; color: var(--feltro-texto-2); margin: 20px 0 0; }
   .mesa-intro{ display:grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px 48px; margin: 36px 0 40px; align-items: start; }
   .como-usar{ margin: 0; max-width: 52ch; }
+  .como-usar p{ margin: 0 0 10px; }
+  .como-usar p:last-child{ margin-bottom: 0; }
+  .dica-exemplo{ display:inline-flex; align-items:center; justify-content:center; width: 22px; height: 22px; border-radius: 999px; background: #FFFFFF; color: var(--feltro); font-size: 14px; font-weight: 700; line-height: 1; vertical-align: 2px; }
   details.glossario{ background: var(--superficie); color: var(--tinta); border-radius: 10px; padding: 14px 20px; --foco: var(--tinta); }
   details.glossario summary{ cursor:pointer; font-weight:700; min-height: 32px; display:flex; align-items:center; }
   details.glossario dl{ margin: 12px 0 4px; font-size: 16px; }
@@ -303,6 +306,35 @@
   .opcao:has(input:checked){ border-color: var(--acento); box-shadow: inset 0 0 0 1px var(--acento); } /* taste-skill-ignore: contorno da opção marcada */
   .opcao input{ accent-color: var(--acento); width: 20px; height: 20px; flex: none; margin: 0; }
   .opcao-odd{ margin-left: auto; padding-left: 8px; font-weight: 400; color: var(--tinta-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* ---------- Dicas: o "?" ao lado dos termos ----------
+     Toque (celular) ou passe o mouse (computador) para ver o que o termo significa. */
+  .rotulo-dica{ display:flex; align-items:center; margin-bottom: 6px; }
+  .rotulo-dica label, .rotulo-dica .label{ margin-bottom: 0; }
+  .titulo-dica{ display:flex; align-items:center; flex-wrap: wrap; margin-bottom: 14px; }
+  .titulo-dica h3, .titulo-dica .passo-titulo{ margin-bottom: 0; }
+  .mc-head .titulo-dica{ margin-bottom: 6px; }
+  .dica-wrap{ position: relative; display: inline-flex; vertical-align: middle; margin-left: 8px; font-family: var(--texto); font-size: 16px; font-weight: 400; line-height: 1.45; letter-spacing: 0; text-transform: none; }
+  .dica{
+    flex: none; width: 24px; height: 24px; padding: 0; border: 0; border-radius: 999px;
+    background: var(--feltro); color: #FFFFFF; font: 700 14px/1 var(--texto); cursor: pointer;
+    display:inline-flex; align-items:center; justify-content:center;
+    transition: transform 160ms var(--ease-out), background-color 160ms ease;
+  }
+  .dica:active{ transform: scale(0.94); }
+  .dica[aria-expanded="true"]{ background: var(--tinta); }
+  .dica-balao{
+    display: none; position: absolute; z-index: 30; top: calc(100% + 10px); left: 50%;
+    transform: translateX(calc(-50% + var(--x, 0px))); width: min(300px, calc(100vw - 32px));
+    padding: 12px 14px; border-radius: 8px; background: #0E1A14; color: #FFFFFF; text-align: left; white-space: normal;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25); --foco: #FFFFFF;
+  }
+  .dica-balao::before{ content: ""; position: absolute; left: 0; right: 0; top: -12px; height: 12px; } /* ponte para o mouse não "cair" no espaço */
+  .dica-wrap.aberta .dica-balao{ display: block; }
+  @media (hover: hover) and (pointer: fine){ .dica-wrap:hover .dica-balao{ display: block; } }
+  .dica-texto{ display: block; }
+  .dica-mais{ display: block; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.2); color: #D3E6DB; }
+  .dica-mais button, .dica-mais a{ font: inherit; font-weight: 700; color: #FFFFFF; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 
   .hero-number{ margin-top: 4px; }
   .hero-number .k{ font-size: 16px; font-weight: 700; color: var(--tinta-2); }
@@ -524,28 +556,33 @@
       <p class="mesa-sub">Probabilidade, valor esperado e risco, a partir das odds que a casa oferece. É uma ferramenta informativa: não recomenda apostar.</p>
 
       <div class="mesa-intro">
-        <p class="como-usar"><strong>Como usar:</strong> preencha os três passos do quadro <strong>Seus dados</strong>: sua banca, o mercado (as odds do jogo) e o resultado em que você apostaria. Os resultados aparecem na hora, sem botão de calcular.</p>
-        <details class="glossario">
+        <div class="como-usar">
+          <p><strong>Como usar:</strong> preencha os três passos do quadro <strong>Seus dados</strong>: sua banca, o mercado (as odds do jogo) e o resultado em que você apostaria. Os resultados aparecem na hora, sem botão de calcular.</p>
+          <p><strong>Não conhece algum termo?</strong> Toque no <span class="dica-exemplo" aria-hidden="true">?</span> ao lado dele, abra o Glossário ou pergunte ao Crupiê, no chat acima.</p>
+        </div>
+        <details class="glossario" id="glossario">
           <summary>Glossário: o que significa cada termo</summary>
           <dl>
+            <dt>Banca</dt>
+            <dd>O dinheiro que você separou para apostar. Exemplo: se você tem R$ 1.000 para apostas, sua banca é R$ 1.000.</dd>
             <dt>Odd</dt>
-            <dd>Quanto a casa devolve para cada R$ 1 apostado se você acertar, já incluindo o próprio R$ 1. Com odd 2,50, uma aposta de R$ 10 devolve R$ 25 (lucro de R$ 15).</dd>
+            <dd>O número que mostra quanto a casa paga se você acertar. Multiplique o valor apostado pela odd para saber quanto volta, já contando o que você apostou. Exemplo: R$ 10 na odd 2,50 voltam R$ 25 (lucro de R$ 15).</dd>
             <dt>Probabilidade implícita</dt>
-            <dd>É 1 dividido pela odd. Somando as probabilidades implícitas dos três resultados (casa, empate e visitante), o total passa de 100%. O simulador divide cada uma por essa soma para tirar a margem da casa.</dd>
+            <dd>A chance que a odd "esconde": é 1 dividido pela odd. Exemplo: odd 2,50 dá 1 ÷ 2,50 = 40%. Somando os três resultados do jogo (casa, empate e visitante), o total passa de 100%; o que passa é o lucro da casa.</dd>
             <dt>Probabilidade usada</dt>
-            <dd>A probabilidade implícita sem a margem da casa. O simulador parte da premissa de que a casa, com mais dados e especialistas que um apostador comum, estima melhor as chances; por isso, essa é tratada como a melhor aproximação da chance real do evento.</dd>
+            <dd>A chance de cada resultado depois de tirar o lucro da casa. O simulador parte da ideia de que a casa, com mais dados e especialistas, estima as chances melhor que um apostador comum. É uma simplificação: a chance verdadeira ninguém sabe.</dd>
             <dt>Margem da casa</dt>
-            <dd>Quanto essa soma passa de 100%. É a vantagem da casa embutida nas odds.</dd>
+            <dd>O lucro que a casa coloca nas odds: quanto a soma das chances passa de 100%. É por causa dela que a casa ganha no longo prazo, seja qual for o resultado do jogo.</dd>
             <dt>Valor esperado</dt>
-            <dd>O ganho ou a perda média por aposta, se a mesma aposta fosse repetida muitas vezes. Não é uma previsão do resultado de uma aposta específica.</dd>
+            <dd>Quanto você ganha ou perde, em média, por aposta, se repetisse a mesma aposta muitas vezes. Não diz o que vai acontecer numa aposta só. Se é negativo, a tendência é perder dinheiro com o tempo.</dd>
             <dt>Risco (desvio-padrão)</dt>
-            <dd>O quanto o resultado de uma aposta costuma se afastar da média. Quanto maior, mais o resultado "balança" entre ganhos e perdas.</dd>
+            <dd>O quanto o resultado de uma aposta costuma ficar longe da média. Quanto maior, mais o seu dinheiro sobe e desce de uma aposta para outra.</dd>
             <dt>Simulação de Monte Carlo</dt>
-            <dd>O computador sorteia centenas de sequências de apostas, respeitando a probabilidade usada, para mostrar a faixa de resultados possíveis.</dd>
+            <dd>O computador repete a mesma sequência de apostas 300 vezes, sorteando vitórias e derrotas conforme as chances do jogo, como se 300 pessoas fizessem as mesmas apostas. Assim dá para ver tudo o que pode acontecer com o seu dinheiro. Não prevê o futuro: mostra as possibilidades.</dd>
             <dt>Critério de Kelly</dt>
-            <dd>Fórmula que calcula a fração da banca que faria a banca crescer mais rápido no longo prazo, <em>se</em> a probabilidade usada estivesse correta. Como o simulador usa a probabilidade das próprias odds, sem a margem, o resultado é sempre não apostar. Aqui ele serve só para comparação: não é uma recomendação.</dd>
+            <dd>Uma fórmula da matemática que diz quanto apostar quando se tem vantagem sobre a casa. Como aqui a vantagem é sempre da casa, ela sempre diz "não aposte". Aparece só para comparar: não é uma recomendação.</dd>
             <dt>Ficar sem dinheiro para apostar</dt>
-            <dd>Na simulação, quando a banca fica menor que o valor da aposta, não é possível apostar de novo, e a banca para ali.</dd>
+            <dd>Na simulação, quando o dinheiro que sobrou fica menor que o valor da aposta, não dá para apostar de novo, e a banca para ali.</dd>
           </dl>
         </details>
       </div>
@@ -559,7 +596,7 @@
             <div class="passo">
               <h4 class="passo-titulo"><span class="passo-num" aria-hidden="true">1</span>Sua banca</h4>
               <div class="field">
-                <label for="banca">Banca atual <span class="sr-only">(em reais)</span></label>
+                <div class="rotulo-dica"><label for="banca">Banca atual <span class="sr-only">(em reais)</span></label><span class="dica-slot" data-dica="banca"></span></div>
                 <div class="com-unidade">
                   <span class="unidade antes" aria-hidden="true">R$</span>
                   <input type="text" class="com-antes" inputmode="decimal" autocomplete="off" id="banca" value="1.000" aria-describedby="erro-banca">
@@ -567,7 +604,7 @@
                 <p class="erro" id="erro-banca" hidden></p>
               </div>
               <div class="field">
-                <span class="label" id="lbl-modo">Como você quer apostar?</span>
+                <div class="rotulo-dica"><span class="label" id="lbl-modo">Como você quer apostar?</span><span class="dica-slot" data-dica="modo"></span></div>
                 <div class="seg" role="group" aria-labelledby="lbl-modo">
                   <button type="button" class="active" data-mode="valor" aria-pressed="true">Valor fixo (R$)</button>
                   <button type="button" data-mode="pct" aria-pressed="false">% da banca</button>
@@ -592,7 +629,7 @@
             </div>
 
             <div class="passo">
-              <h4 class="passo-titulo"><span class="passo-num" aria-hidden="true">2</span>O mercado: odds do jogo</h4>
+              <div class="titulo-dica"><h4 class="passo-titulo"><span class="passo-num" aria-hidden="true">2</span>O mercado: odds do jogo</h4><span class="dica-slot" data-dica="odd"></span></div>
               <p class="passo-ajuda">Digite a odd de cada resultado, como aparece na casa de apostas. Vale vírgula ou ponto (2,10 ou 2.10).</p>
               <div class="odds">
                 <div class="odd-linha">
@@ -633,7 +670,7 @@
           <div class="block" id="resultsCard"></div>
 
           <div class="block" id="blocoKelly">
-            <h3 id="t-kelly">Sua aposta e o critério de Kelly</h3>
+            <div class="titulo-dica"><h3 id="t-kelly">Sua aposta e o critério de Kelly</h3><span class="dica-slot" data-dica="kelly"></span></div>
             <div class="table-scroll" role="region" aria-labelledby="t-kelly" tabindex="0">
               <table class="compare" id="compareTable"></table>
             </div>
@@ -642,7 +679,7 @@
           <div class="block" id="blocoMC">
             <div class="mc-head">
               <div>
-                <h3 id="t-mc">Simulação de Monte Carlo</h3>
+                <div class="titulo-dica"><h3 id="t-mc">Simulação de Monte Carlo</h3><span class="dica-slot" data-dica="montecarlo"></span></div>
                 <p class="hint" style="margin-bottom:0;">300 trajetórias possíveis da sua banca.</p>
               </div>
               <div class="mc-controls">
@@ -782,6 +819,30 @@
     picked: 0
   };
   const resultsCard = $('#resultsCard');
+
+  // ---------- Dicas: textos curtos e simples para cada termo ----------
+  const DICAS = {
+    banca: ['banca', 'Banca é o dinheiro que você separou para apostar. Exemplo: se você tem R$ 1.000 para apostas, sua banca é R$ 1.000.'],
+    modo: ['valor fixo e % da banca', 'Valor fixo: você aposta sempre o mesmo valor (exemplo: R$ 100). % da banca: você aposta uma parte do dinheiro que tem no momento (exemplo: 10%); a aposta diminui quando você perde e aumenta quando ganha.'],
+    odd: ['odd', 'Odd é o número que mostra quanto a casa paga se você acertar. Multiplique o valor apostado pela odd: R$ 100 na odd 2,10 voltam R$ 210 (lucro de R$ 110).'],
+    ve: ['valor esperado', 'É quanto você ganha ou perde, em média, em cada aposta, se fizesse essa mesma aposta muitas vezes. Se é negativo, a tendência é perder dinheiro com o tempo.'],
+    prob: ['probabilidade usada', 'É a chance de esse resultado acontecer, calculada a partir da odd e sem o lucro da casa.'],
+    margem: ['margem da casa', 'É o lucro que a casa já coloca nas odds. Por causa dela, a casa ganha no longo prazo, seja qual for o resultado do jogo.'],
+    risco: ['risco', 'Mostra o quanto o resultado de uma aposta pode variar. Quanto maior, mais o seu dinheiro sobe e desce de uma aposta para outra.'],
+    kelly: ['critério de Kelly', 'É uma fórmula da matemática que diz quanto apostar quando se tem vantagem sobre a casa. Aqui ela sempre diz "não aposte", porque quem tem a vantagem é a casa. Aparece só para comparar.'],
+    montecarlo: ['simulação de Monte Carlo', 'O computador repete a sua sequência de apostas 300 vezes, como se 300 pessoas fizessem as mesmas apostas. Assim dá para ver o que pode acontecer com o seu dinheiro: quantos ganham, quantos perdem e quanto.'],
+    bancamedia: ['banca média final', 'É quanto dinheiro sobrou, em média, no fim das apostas, olhando as 300 simulações.'],
+    semdinheiro: ['ficar sem dinheiro para apostar', 'Parte das 300 simulações em que o dinheiro acabou (ficou menor que o valor da aposta) antes do fim.']
+  };
+  let dicaN = 0;
+  function dica(chave){
+    const [termo, texto] = DICAS[chave];
+    const id = 'dica-' + chave + '-' + (++dicaN);
+    return `<span class="dica-wrap"><button type="button" class="dica" aria-expanded="false" aria-controls="${id}" aria-label="O que é ${termo}?">?</button>`
+      + `<span class="dica-balao" id="${id}"><span class="dica-texto">${texto}</span>`
+      + `<span class="dica-mais">Saiba mais no <button type="button" data-acao="glossario">Glossário</button> ou <a href="#crupie">pergunte ao Crupiê</a>.</span></span></span>`;
+  }
+  document.querySelectorAll('.dica-slot').forEach(s => { s.outerHTML = dica(s.dataset.dica); });
   const compareTable = $('#compareTable');
 
   // Escapa texto digitado pelo usuário antes de inseri-lo no HTML.
@@ -1034,7 +1095,7 @@
     const motivo = m.margin > 1e-9
       ? 'O valor esperado é negativo em qualquer resultado deste mercado: é a margem da casa, distribuída matematicamente.'
       : 'Neste mercado não há margem da casa: o valor esperado é zero, então não há vantagem em apostar.';
-    const kellyBox = `<div class="callout loss"><span class="lead">Pelo critério de Kelly: não apostar.</span><p>${motivo}</p></div>`;
+    const kellyBox = `<div class="callout loss"><span class="lead">Pelo critério de Kelly: não apostar.${dica('kelly')}</span><p>${motivo}</p></div>`;
 
     const explicacao = `<details class="more">
            <summary>por que usar a probabilidade da casa</summary>
@@ -1055,7 +1116,7 @@
       </dl>
 
       <div class="hero-number">
-        <div class="k">Valor esperado desta aposta</div>
+        <div class="k">Valor esperado desta aposta${dica('ve')}</div>
         <div class="v ${evSign}">${fmtMoney(m.user.EV)}</div>
         <div class="pill ${evSign}">${pillTexto}</div>
         <div class="hero-sub">Média teórica se essa aposta fosse repetida muitas vezes. Não é uma previsão do resultado desta aposta específica.</div>
@@ -1063,16 +1124,16 @@
 
       <div class="stat-row">
         <div class="stat">
-          <div class="k">Probabilidade usada</div>
+          <div class="k">Probabilidade usada${dica('prob')}</div>
           <div class="v">${fmtPct(m.p)}</div>
           <div class="cap">Da odd, sem a margem da casa</div>
         </div>
         <div class="stat">
-          <div class="k">Margem da casa</div>
+          <div class="k">Margem da casa${dica('margem')}</div>
           <div class="v loss">${fmtPct(m.margin)}</div>
         </div>
         <div class="stat">
-          <div class="k">Risco (desvio-padrão)</div>
+          <div class="k">Risco (desvio-padrão)${dica('risco')}</div>
           <div class="v">${fmtMoney(m.user.sd)}</div>
           <div class="cap">Isto muda conforme o resultado escolhido</div>
         </div>
@@ -1194,12 +1255,12 @@
     drawChart();
 
     $('#mcStats').innerHTML = `
-      <div class="stat"><div class="k">Banca média final: sua aposta</div><div class="v">${fmtMoney(su.meanFinal)}</div></div>
+      <div class="stat"><div class="k">Banca média final: sua aposta${dica('bancamedia')}</div><div class="v">${fmtMoney(su.meanFinal)}</div></div>
       <div class="stat"><div class="k">Melhor trajetória</div><div class="v profit">${fmtMoney(su.maxFinal)}</div></div>
       <div class="stat"><div class="k">Pior trajetória</div><div class="v loss">${fmtMoney(su.minFinal)}</div></div>
       <div class="stat"><div class="k">Probabilidade de lucro</div><div class="v profit">${fmtPct(su.probLucro,0)}</div></div>
       <div class="stat"><div class="k">Probabilidade de prejuízo</div><div class="v loss">${fmtPct(su.probPrejuizo,0)}</div></div>
-      <div class="stat"><div class="k">Ficou sem dinheiro para apostar</div><div class="v loss">${fmtPct(semDinheiro,0)}</div></div>
+      <div class="stat"><div class="k">Ficou sem dinheiro para apostar${dica('semdinheiro')}</div><div class="v loss">${fmtPct(semDinheiro,0)}</div></div>
     `;
 
     const notas = [];
@@ -1336,6 +1397,60 @@
 
   oddInputs.forEach((_, i) => lerOdd(i));
   recalc();
+})();
+
+// Dicas ("?"): abrir e fechar com clique ou toque; no computador também abrem ao passar o mouse.
+(() => {
+  const fechar = (wrap, devolverFoco) => {
+    wrap.classList.remove('aberta');
+    const b = wrap.querySelector('.dica');
+    b.setAttribute('aria-expanded', 'false');
+    if (devolverFoco) b.focus();
+  };
+  const fecharTodas = exceto => document.querySelectorAll('.dica-wrap.aberta').forEach(w => { if (w !== exceto) fechar(w); });
+  // Mantém o balão dentro da tela (principalmente no celular).
+  function posicionar(wrap){
+    const balao = wrap.querySelector('.dica-balao');
+    balao.style.setProperty('--x', '0px');
+    const r = balao.getBoundingClientRect();
+    if (!r.width) return;
+    const m = 12;
+    let x = 0;
+    if (r.left < m) x = m - r.left;
+    else if (r.right > innerWidth - m) x = (innerWidth - m) - r.right;
+    balao.style.setProperty('--x', x + 'px');
+  }
+  document.addEventListener('click', e => {
+    const botao = e.target.closest('.dica');
+    if (botao) {
+      const wrap = botao.closest('.dica-wrap');
+      const abrir = !wrap.classList.contains('aberta');
+      fecharTodas(wrap);
+      wrap.classList.toggle('aberta', abrir);
+      botao.setAttribute('aria-expanded', String(abrir));
+      if (abrir) posicionar(wrap);
+      return;
+    }
+    if (e.target.closest('[data-acao="glossario"]')) {
+      fecharTodas();
+      const g = document.getElementById('glossario');
+      g.open = true;
+      g.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+      g.querySelector('summary').focus({ preventScroll: true });
+      return;
+    }
+    if (e.target.closest('.dica-balao a')) { fecharTodas(); return; }
+    if (!e.target.closest('.dica-wrap')) fecharTodas();
+  });
+  document.addEventListener('mouseover', e => {
+    const wrap = e.target.closest('.dica-wrap');
+    if (wrap && !wrap.contains(e.relatedTarget)) posicionar(wrap);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    const aberta = document.querySelector('.dica-wrap.aberta');
+    if (aberta) fechar(aberta, true);
+  });
 })();
 
 // Revelação suave das seções ao rolar a página. Sem script, ou com "reduzir movimento", tudo já aparece.
