@@ -37,7 +37,7 @@ Mudanças feitas dentro do Typebot (textos, base de conhecimento, instruções) 
 
 - **Nome:** Conta da Casa. **Assistente:** Crupiê.
 - **Logo:** uma perna chutando uma ficha de pôquer como se fosse uma bola de futebol (desenhada em SVG dentro do `index.html`).
-- **Cores:** branco e tinta escura para leitura; verde de feltro (`#0F5132`) no destaque do topo, nos botões e nos números dos passos do simulador; no simulador, o fundo verde-claro marca os campos que a pessoa pode alterar e os quadros brancos mostram os resultados; vermelho (`#B3261E`) só para a margem da casa e para perdas. O site também tem tema escuro, que segue a configuração do aparelho.
+- **Cores:** branco e tinta escura para leitura; verde de feltro (`#0F5132`) no destaque do topo, nos botões e nos números dos passos do simulador; no simulador, o fundo verde-claro marca os campos que a pessoa pode alterar e os quadros brancos mostram os resultados; vermelho (`#B3261E`) só para a margem da casa e para perdas. O site também tem tema escuro, que segue a configuração do aparelho; o simulador fica sempre claro, como o chat do Crupiê.
 - **Fontes (Google Fonts, gratuitas):** Big Shoulders Display nos títulos e números grandes; Figtree nos textos.
 - **Movimento:** discreto (entrada do topo, recibo "impresso" e revelação das seções ao rolar) e desligado para quem ativa "reduzir movimento" no aparelho.
 - Não há fotos de apostas, cassinos ou estádios, para não deixar o tema atraente.

@@ -195,7 +195,29 @@
      Tema claro, como o chat do Crupiê. Regra visual: o que fica sobre o fundo
      verde-claro (o painel "Seus dados" e o nº de apostas) pode ser alterado;
      os quadros brancos com borda só mostram resultados. */
-  .mesa{ background: var(--papel); color: var(--tinta); padding: 112px 0; }
+  .mesa{ background: var(--papel); color: var(--tinta); padding: 112px 0; color-scheme: light; }
+  /* Como o chat do Crupiê, o simulador fica sempre claro, mesmo com o aparelho no tema escuro.
+     As variáveis derivadas (--ink, --loss...) são redefinidas aqui porque guardam o valor do :root. */
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .mesa{
+      --papel: #FFFFFF; --papel-2: #EEF3F0; --superficie: #FFFFFF;
+      --tinta: #0E1A14; --tinta-2: #44544B; --tinta-3: #5E6E65;
+      --linha: #C9D4CE; --linha-forte: #8A9A91;
+      --casa: #B3261E; --casa-fundo: #FBEBE9; --ganho: #1E7A4C; --ganho-fundo: #E6F3EC;
+      --foco: #0E1A14; --hair: #DCE4DF; --acento: #0F5132;
+      --ink: #0E1A14; --ink-soft: #44544B; --ink-faint: #5E6E65; --line: #0E1A14;
+      --profit: #1E7A4C; --profit-bg: #E6F3EC; --loss: #B3261E; --loss-bg: #FBEBE9; --linha-media: #B3261E;
+    }
+  }
+  :root[data-theme="dark"] .mesa{
+    --papel: #FFFFFF; --papel-2: #EEF3F0; --superficie: #FFFFFF;
+    --tinta: #0E1A14; --tinta-2: #44544B; --tinta-3: #5E6E65;
+    --linha: #C9D4CE; --linha-forte: #8A9A91;
+    --casa: #B3261E; --casa-fundo: #FBEBE9; --ganho: #1E7A4C; --ganho-fundo: #E6F3EC;
+    --foco: #0E1A14; --hair: #DCE4DF; --acento: #0F5132;
+    --ink: #0E1A14; --ink-soft: #44544B; --ink-faint: #5E6E65; --line: #0E1A14;
+    --profit: #1E7A4C; --profit-bg: #E6F3EC; --loss: #B3261E; --loss-bg: #FBEBE9; --linha-media: #B3261E;
+  }
   .mesa-sub{ font-size: 20px; max-width: 52ch; color: var(--tinta-2); margin: 20px 0 0; }
   .mesa-intro{ display:grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px 48px; margin: 36px 0 40px; align-items: start; }
   .como-usar{ margin: 0; max-width: 52ch; }
