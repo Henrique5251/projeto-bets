@@ -36,6 +36,7 @@
     --ganho: #1E7A4C;
     --ganho-fundo: #E6F3EC;
     --foco: #0E1A14;
+    --acento: #0F5132;
     --logo-meiao: #0F5132;
     --logo-faixa: #FFFFFF;
     --logo-chuteira: #0E1A14;
@@ -74,7 +75,7 @@
       --feltro: #0F5132; --feltro-escuro: #0A3B24;
       --casa: #F28B82; --casa-fundo: rgba(242,139,130,0.12);
       --ganho: #63CF96; --ganho-fundo: rgba(99,207,150,0.12);
-      --foco: #EAF1EC; --hair: #263830;
+      --foco: #EAF1EC; --hair: #263830; --acento: #63CF96;
       --logo-chuteira: #EAF1EC; --logo-meiao: #3FA372; --logo-faixa: #FFFFFF;
     }
   }
@@ -85,7 +86,7 @@
     --feltro: #0F5132; --feltro-escuro: #0A3B24;
     --casa: #F28B82; --casa-fundo: rgba(242,139,130,0.12);
     --ganho: #63CF96; --ganho-fundo: rgba(99,207,150,0.12);
-    --foco: #EAF1EC; --hair: #263830;
+    --foco: #EAF1EC; --hair: #263830; --acento: #63CF96;
     --logo-chuteira: #EAF1EC; --logo-meiao: #3FA372; --logo-faixa: #FFFFFF;
   }
 
@@ -190,86 +191,96 @@
     typebot-standard{ height: 78vh; }
   }
 
-  /* ---------- A mesa (simulador) ---------- */
-  .mesa{ background: var(--feltro); color: var(--feltro-texto); padding: 112px 0; --foco: #FFFFFF; }
-  .mesa a{ color: inherit; }
-  .mesa-sub{ font-size: 20px; max-width: 52ch; color: var(--feltro-texto-2); margin: 20px 0 0; }
-  .mesa-intro{ display:grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px 48px; margin: 40px 0 32px; align-items: start; }
-  .howto{ margin: 0; padding-left: 22px; color: var(--feltro-texto); }
-  .howto li{ margin-bottom: 8px; }
-  .howto li::marker{ font-weight: 700; }
-  details.glossario{ background: var(--superficie); color: var(--tinta); border-radius: 6px; padding: 14px 20px; --foco: var(--tinta); }
+  /* ---------- A mesa (simulador) ----------
+     Tema claro, como o chat do Crupiê. Regra visual: o que fica sobre o fundo
+     verde-claro (o painel "Seus dados" e o nº de apostas) pode ser alterado;
+     os quadros brancos com borda só mostram resultados. */
+  .mesa{ background: var(--papel); color: var(--tinta); padding: 112px 0; }
+  .mesa-sub{ font-size: 20px; max-width: 52ch; color: var(--tinta-2); margin: 20px 0 0; }
+  .mesa-intro{ display:grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px 48px; margin: 36px 0 40px; align-items: start; }
+  .como-usar{ margin: 0; max-width: 52ch; }
+  details.glossario{ background: var(--superficie); border: 1px solid var(--linha); border-radius: 10px; padding: 14px 20px; }
   details.glossario summary{ cursor:pointer; font-weight:700; min-height: 32px; display:flex; align-items:center; }
   details.glossario dl{ margin: 12px 0 4px; font-size: 16px; }
   details.glossario dt{ font-weight:700; margin-top: 12px; }
   details.glossario dd{ margin: 2px 0 0; color: var(--tinta-2); }
-  @media (max-width: 860px){ .mesa{ padding: 72px 0; } .mesa-intro{ grid-template-columns: 1fr; } }
+  @media (max-width: 860px){ .mesa{ padding: 72px 0; } .mesa-intro{ grid-template-columns: 1fr; margin: 28px 0 32px; } }
 
-  .grid{ display:grid; grid-template-columns: minmax(300px, 380px) minmax(0, 1fr); gap: 20px; align-items:start; }
-  @media (max-width: 860px){ .grid{ grid-template-columns: 1fr; } }
+  .grid{ display:grid; grid-template-columns: minmax(300px, 400px) minmax(0, 1fr); gap: 24px; align-items:start; }
+  @media (max-width: 960px){ .grid{ grid-template-columns: 1fr; gap: 32px; } .grid > div:first-child{ max-width: 560px; } }
   .grid > div{ min-width: 0; }
 
-  /* folhas de papel sobre o feltro */
-  .input-card, .block{ background: var(--superficie); color: var(--tinta); border-radius: 6px; padding: 22px 22px; margin-bottom: 16px; --foco: var(--tinta); }
+  /* título de cada coluna: "Seus dados" e "Resultados" */
+  .coluna-titulo{ font-family: var(--texto); font-size: 18px; font-weight: 700; line-height: 1.3; margin: 0 0 12px; }
+  .coluna-titulo span{ font-weight: 400; color: var(--tinta-2); }
+
+  /* painel de entrada: tudo o que a pessoa pode mudar */
+  .dados{ background: var(--papel-2); border-radius: 10px; padding: 6px 22px 24px; }
+  .passo{ padding-top: 20px; }
+  .passo + .passo{ margin-top: 20px; border-top: 1px solid var(--linha); }
+  .passo-titulo{ display:flex; align-items:center; gap: 10px; font-family: var(--texto); font-size: 18px; font-weight: 700; line-height: 1.3; margin: 0 0 14px; padding: 0; }
+  .passo-num{ flex: none; width: 28px; height: 28px; border-radius: 999px; background: var(--feltro); color: #FFFFFF; display:inline-flex; align-items:center; justify-content:center; font-size: 15px; font-weight: 700; }
+  .passo-ajuda{ font-size: 16px; color: var(--tinta-2); margin: -6px 0 14px; }
+
+  .block{ background: var(--superficie); color: var(--tinta); border: 1px solid var(--linha); border-radius: 10px; padding: 22px; margin-bottom: 16px; }
   .block:last-of-type{ margin-bottom: 0; }
-  .input-card h3, .block h3{ font-family: var(--display); font-weight: 800; font-size: 30px; line-height: 1; margin-bottom: 14px; }
-  .input-card .hint{ font-size: 16px; color: var(--tinta-2); margin: -4px 0 14px; }
+  .block h3{ font-family: var(--display); font-weight: 800; font-size: 30px; line-height: 1; margin-bottom: 14px; }
   .block .hint{ font-size: 16px; color: var(--tinta-2); margin: 0 0 14px; }
 
   label, .label{ display:block; font-size: 16px; font-weight:700; color: var(--tinta); margin-bottom:6px; }
   .field{ margin-bottom: 16px; }
   .field:last-child{ margin-bottom: 0; }
   input[type=number], input[type=text], select{
-    width:100%; font: inherit; font-size: 16px; padding: 10px 12px; min-height: 46px;
-    border: 1.5px solid var(--linha-forte); border-radius: 6px;
-    background: var(--papel); color: var(--tinta); font-variant-numeric: tabular-nums;
+    width:100%; font: inherit; font-size: 18px; font-weight: 600; padding: 10px 14px; min-height: 50px;
+    border: 2px solid var(--linha-forte); border-radius: 8px;
+    background: var(--superficie); color: var(--tinta); font-variant-numeric: tabular-nums;
+    transition: border-color 160ms ease;
   }
+  @media (hover: hover) and (pointer: fine){ input[type=text]:hover{ border-color: var(--tinta-3); } }
+  input[type=text]:focus{ border-color: var(--acento); }
+  input:focus-visible, select:focus-visible{ outline: 3px solid var(--acento); outline-offset: 1px; }
   input[aria-invalid="true"]{ border-color: var(--casa); box-shadow: 0 0 0 1px var(--casa); } /* taste-skill-ignore: contorno de erro de campo de formulário */
   input::placeholder{ color: var(--tinta-3); }
   .erro{ color: var(--casa); font-size: 16px; font-weight: 700; margin: 6px 0 0; line-height: 1.45; }
   .erro[hidden]{ display:none; }
 
-  .seg{ display:flex; background: var(--papel-2); border-radius: 999px; padding: 4px; gap: 4px; }
+  /* campos com unidade dentro: "R$ 1.000" e "10 %" */
+  .com-unidade{ position: relative; }
+  .com-unidade .unidade{ position:absolute; top: 50%; transform: translateY(-50%); font-size: 18px; font-weight: 700; color: var(--tinta-2); pointer-events: none; }
+  .com-unidade .unidade.antes{ left: 16px; }
+  .com-unidade .unidade.depois{ right: 16px; }
+  .com-unidade input.com-antes{ padding-left: 50px; }
+  .com-unidade input.com-depois{ padding-right: 44px; }
+
+  .seg{ display:flex; background: var(--superficie); border: 2px solid var(--linha); border-radius: 999px; padding: 3px; gap: 4px; }
   .seg button{
     flex:1; min-height: 42px; padding: 0 10px; font: inherit; font-size: 16px; font-weight: 700;
     background: transparent; color: var(--tinta-2); border: 0; border-radius: 999px; cursor:pointer;
     transition: transform 160ms var(--ease-out), background-color 160ms ease, color 160ms ease;
   }
   .seg button:active{ transform: scale(0.97); }
-  .seg button.active{ background: var(--tinta); color: var(--papel); }
+  .seg button.active{ background: var(--feltro); color: #FFFFFF; }
 
-  .outcome-head{ display:grid; grid-template-columns: 1fr 84px 36px; gap: 8px; font-size: 16px; font-weight: 700; color: var(--tinta-2); margin-bottom: 6px; }
-  .outcomes{ display:flex; flex-direction:column; gap: 8px; margin-bottom: 10px; }
-  .outcome-row{ display:grid; grid-template-columns: 1fr 84px 36px; gap: 8px; align-items:center; }
-  .outcome-row input[type=text]{ font-size: 16px; padding: 9px 10px; }
-  .outcome-row input.odd{ text-align: right; }
-  .rm{ width: 36px; height: 36px; border:0; background: transparent; color: var(--tinta-2); border-radius: 999px; cursor:pointer; font-size: 24px; line-height: 1; padding: 0; transition: transform 160ms var(--ease-out); }
-  .rm:active{ transform: scale(0.92); }
-  @media (hover: hover) and (pointer: fine){ .rm:hover{ color: var(--casa); background: var(--casa-fundo); } }
-  .rm:disabled{ opacity: .3; cursor: default; background: transparent; color: var(--tinta-2); }
-  .add-outcome{
-    width:100%; min-height: 44px; border: 1.5px dashed var(--linha-forte); background: transparent; border-radius: 6px;
-    color: var(--tinta); font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 4px;
-    transition: transform 160ms var(--ease-out);
+  /* passo 2: as três odds, sempre os mesmos resultados */
+  .odds{ display:flex; flex-direction:column; gap: 10px; }
+  .odd-linha{ display:grid; grid-template-columns: minmax(0, 1fr) 116px; gap: 12px; align-items:center; }
+  .odd-linha label{ margin: 0; font-weight: 600; }
+  .odd-linha input{ text-align: right; }
+
+  /* passo 3: em qual resultado apostaria */
+  fieldset.pick{ border:0; margin: 0; padding:0; min-width:0; }
+  .opcoes{ display:flex; flex-direction:column; gap: 8px; }
+  .opcao{
+    display:flex; align-items:center; gap: 12px; margin: 0; padding: 12px 14px; min-height: 52px;
+    background: var(--superficie); border: 2px solid var(--linha); border-radius: 8px;
+    font-size: 16px; font-weight: 600; color: var(--tinta); cursor: pointer;
+    transition: border-color 160ms ease;
   }
-  .add-outcome:active{ transform: scale(0.98); }
+  @media (hover: hover) and (pointer: fine){ .opcao:hover{ border-color: var(--linha-forte); } }
+  .opcao:has(input:checked){ border-color: var(--acento); box-shadow: inset 0 0 0 1px var(--acento); } /* taste-skill-ignore: contorno da opção marcada */
+  .opcao input{ accent-color: var(--acento); width: 20px; height: 20px; flex: none; margin: 0; }
+  .opcao-odd{ margin-left: auto; padding-left: 8px; font-weight: 400; color: var(--tinta-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
-  fieldset.pick{ border:0; margin: 18px 0 0; padding:0; min-width:0; }
-  fieldset.pick legend{ font-size: 16px; font-weight: 700; padding: 0; margin-bottom: 4px; }
-  .radiogroup{ display:flex; flex-direction:column; }
-  .radiogroup{ gap: 2px; }
-  .radiogroup label.opt{ display:flex; align-items:center; gap: 12px; font-weight: 400; font-size: 16px; padding: 9px 10px; margin:0 -10px; cursor:pointer; border-radius: 6px; color: var(--tinta-2); }
-  .radiogroup label.opt:has(input:checked){ background: var(--papel-2); }
-  .radiogroup label.opt:has(input:checked){ color: var(--tinta); font-weight: 700; }
-  .radiogroup input{ accent-color: var(--feltro); width: 20px; height: 20px; flex: none; margin: 0; }
-
-  /* resultado principal: a conta desta aposta */
-  #resultsCard{
-    --dente: 14px;
-    padding-bottom: calc(26px + var(--dente));
-    border-radius: 6px 6px 0 0;
-    -webkit-mask: var(--serrilhado); mask: var(--serrilhado);
-  }
   .hero-number{ margin-top: 4px; }
   .hero-number .k{ font-size: 16px; font-weight: 700; color: var(--tinta-2); }
   .hero-number .v{ font-family: var(--display); font-size: clamp(56px, 7vw, 72px); font-weight: 800; line-height: 1; margin-top: 4px; }
@@ -323,9 +334,9 @@
 
   .mc-head{ display:flex; align-items:flex-end; justify-content:space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
   .mc-head h3{ margin-bottom: 6px; }
-  .mc-controls{ display:flex; align-items:flex-end; gap: 12px; flex-wrap: wrap; }
+  .mc-controls{ display:flex; align-items:flex-end; gap: 12px; flex-wrap: wrap; background: var(--papel-2); border-radius: 10px; padding: 12px 14px; }
   .mc-controls .field{ margin-bottom: 0; }
-  .mc-controls input{ width: 100px; text-align: right; }
+  .mc-controls input{ width: 104px; text-align: right; }
   .mc-controls .erro{ max-width: 220px; }
   .rerun-btn{
     min-height: 46px; padding: 0 20px; border: 0; background: var(--feltro); color: #FFFFFF; border-radius: 999px;
@@ -357,9 +368,10 @@
   .mc-notes li{ margin-bottom: 4px; }
 
   .empty{ color: var(--tinta-2); font-size: 16px; padding: 32px 4px; text-align:center; }
-  .mesa-nota{ margin: 28px 0 0; font-size: 16px; color: var(--feltro-texto-2); max-width: 60ch; }
+  .mesa-nota{ margin: 28px 0 0; font-size: 16px; color: var(--tinta-2); max-width: 60ch; }
 
   /* ---------- Sobre ---------- */
+  .sobre{ border-top: 1px solid var(--linha); }
   .sobre .wrap{ display:grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 48px; }
   .sobre-corpo{ display:grid; grid-template-columns: 1fr 1fr; gap: 8px 40px; }
   .sobre-corpo > p:first-child{ grid-column: 1 / -1; font-size: 20px; max-width: 60ch; }
@@ -490,21 +502,14 @@
       <p class="mesa-sub">Probabilidade, valor esperado e risco, a partir das odds que a casa oferece. É uma ferramenta informativa: não recomenda apostar.</p>
 
       <div class="mesa-intro">
-        <div>
-          <h3 class="sr-only">Como usar</h3>
-          <ol class="howto">
-            <li>Informe sua banca (o dinheiro disponível) e quanto apostaria em cada rodada.</li>
-            <li>Digite as odds de <strong>todos</strong> os resultados possíveis do jogo (com vírgula ou ponto, como 2,10) e escolha em qual você apostaria.</li>
-            <li>Veja o valor esperado, o risco e, na simulação, o que pode acontecer com a banca depois de várias apostas.</li>
-          </ol>
-        </div>
+        <p class="como-usar"><strong>Como usar:</strong> preencha os três passos do quadro <strong>Seus dados</strong>: sua banca, o mercado (as odds do jogo) e o resultado em que você apostaria. Os resultados aparecem na hora, sem botão de calcular.</p>
         <details class="glossario">
           <summary>Glossário: o que significa cada termo</summary>
           <dl>
             <dt>Odd</dt>
             <dd>Quanto a casa devolve para cada R$ 1 apostado se você acertar, já incluindo o próprio R$ 1. Com odd 2,50, uma aposta de R$ 10 devolve R$ 25 (lucro de R$ 15).</dd>
             <dt>Probabilidade implícita</dt>
-            <dd>É 1 dividido pela odd. Somando as probabilidades implícitas de todos os resultados, o total passa de 100%. O simulador divide cada uma por essa soma para tirar a margem da casa.</dd>
+            <dd>É 1 dividido pela odd. Somando as probabilidades implícitas dos três resultados (casa, empate e visitante), o total passa de 100%. O simulador divide cada uma por essa soma para tirar a margem da casa.</dd>
             <dt>Probabilidade usada</dt>
             <dd>A probabilidade implícita sem a margem da casa. O simulador parte da premissa de que a casa, com mais dados e especialistas que um apostador comum, estima melhor as chances; por isso, essa é tratada como a melhor aproximação da chance real do evento.</dd>
             <dt>Margem da casa</dt>
@@ -524,52 +529,83 @@
       </div>
 
       <div class="grid">
-        <!-- ENTRADAS -->
+        <!-- ENTRADAS: tudo o que a pessoa pode mudar fica neste painel -->
         <div>
-          <div class="input-card">
-            <h3>Sua banca</h3>
-            <div class="field">
-              <label for="banca">Banca atual (R$)</label>
-              <input type="text" inputmode="decimal" autocomplete="off" id="banca" value="1.000" aria-describedby="erro-banca">
-              <p class="erro" id="erro-banca" hidden></p>
-            </div>
-            <div class="field">
-              <span class="label" id="lbl-modo">Como você quer apostar?</span>
-              <div class="seg" role="group" aria-labelledby="lbl-modo">
-                <button type="button" class="active" data-mode="valor" aria-pressed="true">Valor fixo (R$)</button>
-                <button type="button" data-mode="pct" aria-pressed="false">% da banca</button>
+          <h3 class="coluna-titulo" id="t-dados">Seus dados <span>· preencha ou altere</span></h3>
+          <div class="dados" role="group" aria-labelledby="t-dados">
+
+            <div class="passo">
+              <h4 class="passo-titulo"><span class="passo-num" aria-hidden="true">1</span>Sua banca</h4>
+              <div class="field">
+                <label for="banca">Banca atual <span class="sr-only">(em reais)</span></label>
+                <div class="com-unidade">
+                  <span class="unidade antes" aria-hidden="true">R$</span>
+                  <input type="text" class="com-antes" inputmode="decimal" autocomplete="off" id="banca" value="1.000" aria-describedby="erro-banca">
+                </div>
+                <p class="erro" id="erro-banca" hidden></p>
+              </div>
+              <div class="field">
+                <span class="label" id="lbl-modo">Como você quer apostar?</span>
+                <div class="seg" role="group" aria-labelledby="lbl-modo">
+                  <button type="button" class="active" data-mode="valor" aria-pressed="true">Valor fixo (R$)</button>
+                  <button type="button" data-mode="pct" aria-pressed="false">% da banca</button>
+                </div>
+              </div>
+              <div class="field" id="campo-valor">
+                <label for="valorFixo">Valor de cada aposta <span class="sr-only">(em reais)</span></label>
+                <div class="com-unidade">
+                  <span class="unidade antes" aria-hidden="true">R$</span>
+                  <input type="text" class="com-antes" inputmode="decimal" autocomplete="off" id="valorFixo" value="100" aria-describedby="erro-valor">
+                </div>
+                <p class="erro" id="erro-valor" hidden></p>
+              </div>
+              <div class="field" id="campo-pct" style="display:none">
+                <label for="valorPct">Percentual da banca em cada aposta</label>
+                <div class="com-unidade">
+                  <input type="text" class="com-depois" inputmode="decimal" autocomplete="off" id="valorPct" value="10" aria-describedby="erro-pct">
+                  <span class="unidade depois" aria-hidden="true">%</span>
+                </div>
+                <p class="erro" id="erro-pct" hidden></p>
               </div>
             </div>
-            <div class="field" id="campo-valor">
-              <label for="valorFixo">Valor da aposta (R$)</label>
-              <input type="text" inputmode="decimal" autocomplete="off" id="valorFixo" value="100" aria-describedby="erro-valor">
-              <p class="erro" id="erro-valor" hidden></p>
+
+            <div class="passo">
+              <h4 class="passo-titulo"><span class="passo-num" aria-hidden="true">2</span>O mercado: odds do jogo</h4>
+              <p class="passo-ajuda">Digite a odd de cada resultado, como aparece na casa de apostas. Vale vírgula ou ponto (2,10 ou 2.10).</p>
+              <div class="odds">
+                <div class="odd-linha">
+                  <label for="odd-0">Vitória do time da casa</label>
+                  <input type="text" class="odd" inputmode="decimal" autocomplete="off" id="odd-0" data-idx="0" value="2,10" aria-describedby="erro-mercado">
+                </div>
+                <div class="odd-linha">
+                  <label for="odd-1">Empate</label>
+                  <input type="text" class="odd" inputmode="decimal" autocomplete="off" id="odd-1" data-idx="1" value="3,30" aria-describedby="erro-mercado">
+                </div>
+                <div class="odd-linha">
+                  <label for="odd-2">Vitória do time visitante</label>
+                  <input type="text" class="odd" inputmode="decimal" autocomplete="off" id="odd-2" data-idx="2" value="3,40" aria-describedby="erro-mercado">
+                </div>
+              </div>
+              <p class="erro" id="erro-mercado" hidden></p>
             </div>
-            <div class="field" id="campo-pct" style="display:none">
-              <label for="valorPct">Percentual da banca (%)</label>
-              <input type="text" inputmode="decimal" autocomplete="off" id="valorPct" value="10" aria-describedby="erro-pct">
-              <p class="erro" id="erro-pct" hidden></p>
+
+            <div class="passo">
+              <fieldset class="pick">
+                <legend class="passo-titulo"><span class="passo-num" aria-hidden="true">3</span>Em qual resultado você apostaria?</legend>
+                <div class="opcoes" id="pickOutcome">
+                  <label class="opcao"><input type="radio" name="pick" value="0" checked><span>Vitória do time da casa</span><span class="opcao-odd" data-idx="0">odd 2,10</span></label>
+                  <label class="opcao"><input type="radio" name="pick" value="1"><span>Empate</span><span class="opcao-odd" data-idx="1">odd 3,30</span></label>
+                  <label class="opcao"><input type="radio" name="pick" value="2"><span>Vitória do time visitante</span><span class="opcao-odd" data-idx="2">odd 3,40</span></label>
+                </div>
+              </fieldset>
             </div>
+
           </div>
-
-          <div class="input-card">
-            <h3>O mercado</h3>
-            <p class="hint">Odds de todos os resultados possíveis, não só do que você quer apostar.</p>
-            <div class="outcome-head" aria-hidden="true"><span>Resultado</span><span>Odd</span><span></span></div>
-            <div id="outcomes" class="outcomes"></div>
-            <p class="erro" id="erro-mercado" hidden></p>
-            <button type="button" class="add-outcome" id="addOutcome">+ adicionar resultado</button>
-
-            <fieldset class="pick">
-              <legend>Em qual resultado você apostaria?</legend>
-              <div class="radiogroup" id="pickOutcome"></div>
-            </fieldset>
-          </div>
-
         </div>
 
-        <!-- RESULTADOS -->
+        <!-- RESULTADOS: só leitura, calculados a partir do painel ao lado -->
         <div>
+          <h3 class="coluna-titulo">Resultados <span>· mudam sozinhos</span></h3>
           <p id="resumo-falado" class="sr-only" aria-live="polite"></p>
 
           <div class="block" id="resultsCard"></div>
@@ -705,24 +741,24 @@
      - números podem ser digitados com vírgula ou ponto;
      - cada campo é validado e mostra o que corrigir;
      - se as probabilidades implícitas somam menos de 100%, o
-       simulador avisa que falta resultado no mercado;
-     - na simulação, só se aposta quando há dinheiro suficiente.
+       simulador avisa que alguma odd foi digitada errado;
+     - na simulação, só se aposta quando há dinheiro suficiente;
+     - o mercado tem sempre os três resultados de um jogo de futebol:
+       vitória do time da casa, empate e vitória do time visitante.
      ========================================================= -->
 <script>
 (function(){
+  const $ = sel => document.querySelector(sel);
+  const oddInputs = [...document.querySelectorAll('input.odd')];
   const state = {
     stakeMode: 'valor',
     outcomes: [
-      { label: 'Vitória do time da casa', odd: 2.10, texto: '2,10' },
-      { label: 'Empate', odd: 3.30, texto: '3,30' },
-      { label: 'Vitória do time visitante', odd: 3.40, texto: '3,40' },
+      { label: 'Vitória do time da casa' },
+      { label: 'Empate' },
+      { label: 'Vitória do time visitante' },
     ],
     picked: 0
   };
-
-  const $ = sel => document.querySelector(sel);
-  const outcomesEl = $('#outcomes');
-  const pickEl = $('#pickOutcome');
   const resultsCard = $('#resultsCard');
   const compareTable = $('#compareTable');
 
@@ -761,12 +797,14 @@
   // que leitores de tela anunciam como "menos".
   function fmtMoney(v){
     if(!isFinite(v)) return '—';
+    if(Math.abs(v) < 0.005) v = 0;   // sobras de arredondamento não viram "−R$ 0,00"
     const av = fmtNum(Math.abs(v), 2);
     return v < 0 ? ('−R$ ' + av) : ('R$ ' + av);
   }
   function fmtPct(v, digits){
     if(!isFinite(v)) return '—';
     const d = digits==null?1:digits;
+    if(Math.abs(v)*100 < 0.5 * Math.pow(10, -d)) v = 0;
     const av = fmtNum(Math.abs(v)*100, d);
     return v < 0 ? ('−' + av + '%') : (av + '%');
   }
@@ -793,64 +831,21 @@
     anunciarTimer = setTimeout(() => { $('#resumo-falado').textContent = texto; }, 800);
   }
 
-  function renderOutcomes(){
-    outcomesEl.innerHTML = '';
-    state.outcomes.forEach((o, i) => {
-      const row = document.createElement('div');
-      row.className = 'outcome-row';
-      row.innerHTML = `
-        <input type="text" data-idx="${i}" data-field="label" value="${esc(o.label)}" placeholder="Nome do resultado" aria-label="Nome do resultado ${i+1}">
-        <input type="text" class="odd" inputmode="decimal" autocomplete="off" data-idx="${i}" data-field="odd" value="${esc(o.texto)}" placeholder="Odd" aria-label="Odd do resultado ${i+1}" aria-describedby="erro-mercado">
-        <button type="button" class="rm" data-idx="${i}" title="Remover" aria-label="Remover resultado ${i+1}" ${state.outcomes.length<=2?'disabled':''}>×</button>
-      `;
-      outcomesEl.appendChild(row);
-    });
-
-    outcomesEl.querySelectorAll('input').forEach(inp => {
-      inp.addEventListener('input', e => {
-        const idx = +e.target.dataset.idx;
-        const o = state.outcomes[idx];
-        if(e.target.dataset.field === 'odd'){
-          o.texto = e.target.value;
-          o.odd = lerNumero(e.target.value, 'odd');
-        } else {
-          o.label = e.target.value;
-          renderPicker();
-        }
-        recalc();
-      });
-    });
-    outcomesEl.querySelectorAll('.rm').forEach(btn => {
-      btn.addEventListener('click', e => {
-        const idx = +e.currentTarget.dataset.idx;
-        if(state.outcomes.length <= 2) return;
-        state.outcomes.splice(idx, 1);
-        if(state.picked >= state.outcomes.length) state.picked = 0;
-        renderOutcomes(); renderPicker(); recalc();
-        $('#addOutcome').focus();
-      });
-    });
+  // ---------- Odds dos três resultados ----------
+  // Lê a odd digitada e mostra o mesmo número ao lado da opção no passo 3.
+  function lerOdd(i){
+    const o = state.outcomes[i];
+    o.odd = lerNumero(oddInputs[i].value, 'odd');
+    const alvo = document.querySelector(`.opcao-odd[data-idx="${i}"]`);
+    if(alvo) alvo.textContent = (isFinite(o.odd) && o.odd > 1) ? 'odd ' + fmtNum(o.odd, 2) : 'odd —';
   }
+  oddInputs.forEach((inp, i) => {
+    inp.addEventListener('input', () => { lerOdd(i); recalc(); });
+  });
 
-  function renderPicker(){
-    pickEl.innerHTML = '';
-    state.outcomes.forEach((o, i) => {
-      const lab = document.createElement('label');
-      lab.className = 'opt';
-      lab.innerHTML = `<input type="radio" name="pick" value="${i}" ${state.picked===i?'checked':''}> <span>${esc(o.label||'Resultado '+(i+1))}</span>`;
-      pickEl.appendChild(lab);
-    });
-    pickEl.querySelectorAll('input').forEach(r => {
-      r.addEventListener('change', e => { state.picked = +e.target.value; recalc(); });
-    });
-  }
-
-  $('#addOutcome').addEventListener('click', () => {
-    if(state.outcomes.length >= 6) return;
-    state.outcomes.push({ label: 'Resultado ' + (state.outcomes.length+1), odd: 2.00, texto: '2,00' });
-    renderOutcomes(); renderPicker(); recalc();
-    const rows = outcomesEl.querySelectorAll('.outcome-row');
-    rows[rows.length-1].querySelector('input[type=text]').focus();
+  document.querySelectorAll('#pickOutcome input[name=pick]').forEach(r => {
+    if(r.checked) state.picked = +r.value;
+    r.addEventListener('change', e => { state.picked = +e.target.value; recalc(); });
   });
 
   document.querySelectorAll('.seg button').forEach(btn => {
@@ -901,22 +896,23 @@
       marcarErro('#valorFixo', 'erro-valor', null);
     }
 
-    // odds do mercado
+    // odds dos três resultados
     const odds = state.outcomes.map(o => o.odd);
     const ruins = [];
-    outcomesEl.querySelectorAll('input.odd').forEach((inp, i) => {
+    oddInputs.forEach((inp, i) => {
       if(isFinite(odds[i]) && odds[i] > 1) inp.removeAttribute('aria-invalid');
-      else { inp.setAttribute('aria-invalid', 'true'); ruins.push(i+1); }
+      else { inp.setAttribute('aria-invalid', 'true'); ruins.push(`"${state.outcomes[i].label}"`); }
     });
     let eMercado = null, incompleto = false;
     if(ruins.length){
-      eMercado = (ruins.length === 1 ? `A odd do resultado ${ruins[0]} precisa` : `As odds dos resultados ${ruins.join(', ')} precisam`)
+      const lista = ruins.length === 1 ? ruins[0] : ruins.slice(0, -1).join(', ') + ' e ' + ruins[ruins.length - 1];
+      eMercado = (ruins.length === 1 ? `A odd de ${lista} precisa` : `As odds de ${lista} precisam`)
         + ' ser um número maior que 1 (exemplo: 2,10).';
     } else {
       const S = odds.reduce((a, o) => a + 1/o, 0);
       if(S < 1 - 1e-9){
         incompleto = true;
-        eMercado = `As probabilidades implícitas somam ${fmtPct(S)}, menos que 100%. Numa mesma casa de apostas essa soma sempre passa de 100% (a diferença é a margem da casa). Confira se falta algum resultado, como o empate, ou se alguma odd foi digitada errado.`;
+        eMercado = `As probabilidades implícitas somam ${fmtPct(S)}, menos que 100%. Numa mesma casa de apostas essa soma sempre passa de 100% (a diferença é a margem da casa). Confira se alguma odd foi digitada errado.`;
       }
     }
     const pm = $('#erro-mercado'); pm.textContent = eMercado || ''; pm.hidden = !eMercado;
@@ -999,7 +995,7 @@
     if(!e.ok){
       $('#rerunMC').disabled = true;
       limparResultados(e.incompleto
-        ? 'Confira as odds do mercado: veja o aviso no quadro "O mercado".'
+        ? 'Confira as odds do jogo: veja o aviso no passo 2 do quadro "Seus dados".'
         : 'Corrija os campos destacados em vermelho para ver os resultados.');
       return;
     }
@@ -1316,8 +1312,7 @@
   // Expõe as funções puras para testes automatizados (não afeta o uso normal).
   window.__simulador = { lerNumero, runSimulations, summarize, probSemDinheiro };
 
-  renderOutcomes();
-  renderPicker();
+  oddInputs.forEach((_, i) => lerOdd(i));
   recalc();
 })();
 

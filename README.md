@@ -37,14 +37,14 @@ Mudanças feitas dentro do Typebot (textos, base de conhecimento, instruções) 
 
 - **Nome:** Conta da Casa. **Assistente:** Crupiê.
 - **Logo:** uma perna chutando uma ficha de pôquer como se fosse uma bola de futebol (desenhada em SVG dentro do `index.html`).
-- **Cores:** branco e tinta escura para leitura; verde de feltro (`#0F5132`) como fundo do simulador, a "mesa"; vermelho (`#B3261E`) só para a margem da casa e para perdas. O site também tem tema escuro, que segue a configuração do aparelho.
+- **Cores:** branco e tinta escura para leitura; verde de feltro (`#0F5132`) no destaque do topo, nos botões e nos números dos passos do simulador; no simulador, o fundo verde-claro marca os campos que a pessoa pode alterar e os quadros brancos mostram os resultados; vermelho (`#B3261E`) só para a margem da casa e para perdas. O site também tem tema escuro, que segue a configuração do aparelho.
 - **Fontes (Google Fonts, gratuitas):** Big Shoulders Display nos títulos e números grandes; Figtree nos textos.
 - **Movimento:** discreto (entrada do topo, recibo "impresso" e revelação das seções ao rolar) e desligado para quem ativa "reduzir movimento" no aparelho.
 - Não há fotos de apostas, cassinos ou estádios, para não deixar o tema atraente.
 
 ## Cálculos do simulador
 
-Para um mercado com odds decimais $O_1, \dots, O_k$:
+O simulador usa sempre os três resultados de um jogo de futebol: vitória do time da casa, empate e vitória do time visitante. Para odds decimais $O_1, O_2, O_3$:
 
 - Probabilidade implícita: $q_i = 1/O_i$
 - Soma: $S = \sum_i q_i$; margem da casa: $S - 1$
@@ -61,7 +61,7 @@ Para um mercado com odds decimais $O_1, \dots, O_k$:
 
 - Números podem ser digitados com vírgula ou ponto (`2,10` ou `2.10`). Em valores em reais, `1.500` é lido como mil e quinhentos.
 - Banca maior que zero; aposta maior que zero e não maior que a banca; percentual entre 0 e 100; odds maiores que 1; número de apostas inteiro entre 5 e 150.
-- Se as probabilidades implícitas somam menos de 100%, o simulador não calcula e avisa que provavelmente falta algum resultado do mercado (ou que alguma odd foi digitada errado), porque numa mesma casa essa soma sempre passa de 100%.
+- Se as probabilidades implícitas somam menos de 100%, o simulador não calcula e avisa que alguma odd provavelmente foi digitada errado, porque numa mesma casa essa soma sempre passa de 100%.
 
 ## Limitações conhecidas
 
@@ -72,6 +72,6 @@ Para um mercado com odds decimais $O_1, \dots, O_k$:
 
 ## Verificação
 
-- As fórmulas exibidas foram conferidas contra um cálculo independente em 8 cenários (mercados de 2, 3 e 6 resultados, valor fixo, % da banca e mercado sem margem).
+- As fórmulas exibidas foram conferidas contra um cálculo independente em 8 cenários com os três resultados (jogos equilibrados e com favorito forte, apostas na casa, no empate e no visitante, valor fixo, % da banca e mercado sem margem).
 - A simulação foi comparada com o cálculo exato (distribuição binomial e programação dinâmica com a regra de parar sem dinheiro) em centenas de milhares de trajetórias.
 - Acessibilidade verificada com axe-core (critérios WCAG 2.2 AA), nos temas claro e escuro, e layout testado em telas de 320 px a 1280 px.
