@@ -6,7 +6,7 @@ Projeto acadêmico da disciplina **Projetos III** (graduação em Economia, 2º 
 Site educativo que reúne:
 
 - **Crupiê**, o assistente de IA (feito no Typebot), que responde dúvidas sobre apostas esportivas com base na base de conhecimento do grupo e indica as fontes;
-- **Simulador financeiro**, que calcula probabilidade implícita, margem da casa, valor esperado, risco (desvio-padrão), critério de Kelly e uma simulação de Monte Carlo com 300 trajetórias.
+- **Simulador financeiro**, que calcula probabilidade implícita, margem da casa, valor esperado, risco (desvio-padrão), critério de Kelly, uma simulação de Monte Carlo com 300 trajetórias e o quadro "Apostar ou guardar?", que compara apostar toda semana com guardar o mesmo dinheiro em renda fixa.
 
 O site não incentiva apostas e não oferece aconselhamento financeiro, psicológico ou jurídico.
 
@@ -57,12 +57,20 @@ O simulador usa os três resultados de um jogo de futebol (vitória do time da c
 - Monte Carlo: 300 sequências de apostas independentes; em cada aposta, ganha com probabilidade $p$. Só se aposta quando a banca cobre o valor da aposta: se a banca fica menor que o valor da aposta, ela para ali. Mostra média, melhor e pior trajetória e a proporção de trajetórias com lucro, com prejuízo e que ficaram sem dinheiro para apostar (no valor fixo, banca menor que o valor da aposta; no % da banca, menos de R$ 1). Proporções acima de 0% e abaixo de 0,5% aparecem como "menos de 1%" (e o contrário como "mais de 99%"), para 1 trajetória em 300 não virar "0%". O eixo do gráfico usa valores redondos e não mostra valores negativos.
 - O critério de Kelly aparece apenas como comparação, não como recomendação. Com a probabilidade sem margem, ele sempre dá zero (não apostar), porque o valor esperado é negativo em qualquer resultado: $E = V(1/S - 1)$.
 
+### Apostar ou guardar? (custo de oportunidade)
+
+- A pessoa escolhe quantas apostas faz por semana (1 a 50), por quantos meses (1 a 120) e o rendimento ao ano de uma aplicação (0% a 30%; 10% vem só como exemplo).
+- A mesma aposta do passo 1 (valor $V$) é feita $f$ vezes por semana durante $s = \text{round}(m \times 52/12)$ semanas, sendo $m$ o número de meses, sempre com dinheiro novo: o prêmio não é reapostado. Total de apostas $N = f \cdot s$; dinheiro colocado $T = V f s$.
+- Apostando, o que volta em média é $T + N \cdot E$. A faixa "9 de cada 10 casos" e a chance de terminar com lucro vêm da distribuição binomial exata do número de vitórias (percentis 5 e 95; lucro quando $k \cdot O > N$).
+- Guardando, o mesmo valor semanal rende a taxa anual $i$ convertida para semanal, $r = (1+i)^{1/52} - 1$, com depósito no fim de cada semana: $T_{\text{guardado}} = V f \cdot \frac{(1+r)^s - 1}{r}$.
+- No modo % da banca, o quadro usa como valor de cada aposta o valor da primeira aposta. Impostos e taxas da aplicação não entram na conta; o rendimento é uma hipótese de comparação, não recomendação de investimento.
+
 ## Entradas e validação
 
 - Números podem ser digitados com vírgula ou ponto (`2,10` ou `2.10`). Em valores em reais, `1.500` é lido como mil e quinhentos.
 - Banca maior que zero; aposta maior que zero e não maior que a banca; percentual entre 0 e 100; odds maiores que 1; número de apostas inteiro entre 5 e 150. Textos como "1500 reais" são aceitos; letras no lugar de números geram "Digite só o número, sem letras".
 - Os erros aparecem quando a pessoa para de digitar (depois de 0,7 s) ou sai do campo, para não piscar erro no meio da digitação; enquanto isso, o último resultado continua na tela.
-- Um número de apostas inválido esconde só a Simulação de Monte Carlo; a conta da aposta continua aparecendo.
+- Um número de apostas inválido esconde só a Simulação de Monte Carlo; a conta da aposta continua aparecendo. Do mesmo jeito, um campo inválido no "Apostar ou guardar?" esconde só esse quadro.
 - Se a margem da casa passar de 20%, aparece um aviso (sem bloquear a conta), porque isso costuma ser odd digitada errado ou a opção com/sem empate trocada.
 - Se as probabilidades implícitas somam menos de 100%, o simulador não calcula e avisa que alguma odd provavelmente foi digitada errado, porque numa mesma casa essa soma sempre passa de 100%. No modo sem empate, o aviso lembra de conferir se as odds são de um jogo sem empate.
 - No modo sem empate, a odd do empate fica escondida e não é validada nem usada na conta.
@@ -79,5 +87,6 @@ O simulador usa os três resultados de um jogo de futebol (vitória do time da c
 - As fórmulas exibidas foram conferidas contra um cálculo independente em 13 cenários: 9 com empate (jogos equilibrados e com favorito forte, apostas na casa, no empate e no visitante, valor fixo, % da banca e mercado sem margem) e 4 sem empate (odds iguais, favorito forte, % da banca e mercado sem margem).
 - A troca entre com e sem empate foi testada em computador e celular: esconde a linha e a opção do empate, passa quem tinha marcado o empate para a vitória da casa, não apaga odds digitadas e funciona pelo teclado.
 - Antes da divulgação, o site, o simulador e o Crupiê passaram por uma rodada de testes com 40 a 50 simulações de usuário (personas de apostador médio em celular, tablet e computador), avaliadas com as perguntas do formulário de satisfação do grupo. As falhas encontradas (balões "?" cortados no celular, erros piscando durante a digitação, porcentagens arredondadas para 0%, entre outras) foram corrigidas e têm testes automáticos.
+- O quadro "Apostar ou guardar?" foi conferido contra um cálculo independente em 8 cenários (com e sem empate, de 1 mês a 10 anos, de 4 a 26 mil apostas, rendimento de 0% a 30%), além dos limites de cada campo e do modo % da banca.
 - A simulação foi comparada com o cálculo exato (distribuição binomial e programação dinâmica com a regra de parar sem dinheiro) em centenas de milhares de trajetórias.
 - Acessibilidade verificada com axe-core (critérios WCAG 2.2 AA), nos temas claro e escuro, e layout testado em telas de 320 px a 1280 px.

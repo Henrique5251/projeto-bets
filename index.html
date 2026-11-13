@@ -407,6 +407,12 @@
   .mc-controls .field{ margin-bottom: 0; }
   .mc-controls input{ width: 104px; text-align: right; }
   .mc-controls .erro{ max-width: 220px; }
+  .guardar-controles{ margin-bottom: 8px; }
+  .guardar-controles .com-unidade{ width: 124px; }
+  .guardar-controles .com-unidade input{ width: 124px; }
+  .faixa-v{ font-size: 22px !important; }
+  .faixa-v span{ white-space: nowrap; }
+  .guardar-nota{ font-size: 15px; color: var(--tinta-3); margin: 0 0 14px; max-width: 70ch; }
   .rerun-btn{
     min-height: 46px; padding: 0 20px; border: 0; background: var(--feltro); color: #FFFFFF; border-radius: 999px;
     font: inherit; font-size: 16px; font-weight: 700; cursor: pointer; white-space: nowrap;
@@ -446,6 +452,11 @@
   .sobre h3{ margin: 8px 0 8px; }
   .sobre ul{ padding-left: 20px; margin: 0 0 16px; }
   .sobre li{ margin-bottom: 6px; }
+  .fontes{ grid-column: 1 / -1; }
+  .fontes > p{ margin: 0 0 10px; max-width: 70ch; }
+  .fontes h4{ font-size: 17px; margin: 14px 0 6px; }
+  .fontes ul{ font-size: 16px; }
+  .fontes a{ color: inherit; overflow-wrap: anywhere; }
   .ajuda{ grid-column: 1 / -1; background: var(--papel-2); border-radius: 6px; padding: 20px 22px; margin-top: 16px; }
   .ajuda h3{ margin-top: 0; }
   .ajuda p{ margin: 0; max-width: 64ch; }
@@ -723,6 +734,7 @@
               <div class="chart-legend">
                 <span><i class="base"></i> Banca inicial</span>
                 <span><i class="band"></i> Faixa entre o menor e o maior valor simulado a cada aposta (sua aposta)</span>
+                <span>Linhas finas: 30 das 300 trajetórias, como exemplo</span>
                 <span><i></i> Banca média: sua aposta</span>
                 <span><i class="kelly"></i> Banca média: critério de Kelly</span>
               </div>
@@ -733,6 +745,39 @@
               <div class="table-scroll" role="region" aria-labelledby="t-mc" tabindex="0">
                 <table class="compare" id="mcCompareTable"></table>
               </div>
+            </div>
+          </div>
+
+          <div class="block" id="blocoGuardar">
+            <div class="titulo-dica"><h3 id="t-guardar">Apostar ou guardar?</h3><span class="dica-slot" data-dica="oportunidade"></span></div>
+            <p class="hint">E se você fizesse essa mesma aposta toda semana, com dinheiro novo, durante meses? Compare com guardar o mesmo dinheiro numa aplicação. É o <strong>custo de oportunidade</strong>: o que você deixa de ter ao escolher apostar.</p>
+            <div class="mc-controls guardar-controles">
+              <div class="field">
+                <label for="freqSemana">Apostas por semana</label>
+                <input type="text" inputmode="numeric" autocomplete="off" id="freqSemana" value="2" aria-describedby="erro-freq">
+                <p class="erro" id="erro-freq" hidden></p>
+              </div>
+              <div class="field">
+                <label for="nMeses">Por quantos meses</label>
+                <input type="text" inputmode="numeric" autocomplete="off" id="nMeses" value="12" aria-describedby="erro-meses">
+                <p class="erro" id="erro-meses" hidden></p>
+              </div>
+              <div class="field">
+                <label for="taxaAno">Rendimento ao ano se guardasse</label>
+                <div class="com-unidade">
+                  <input type="text" class="com-depois" inputmode="decimal" autocomplete="off" id="taxaAno" value="10" aria-describedby="erro-taxa nota-taxa">
+                  <span class="unidade depois" aria-hidden="true">%</span>
+                </div>
+                <p class="erro" id="erro-taxa" hidden></p>
+              </div>
+            </div>
+            <p class="guardar-nota" id="nota-taxa">Os 10% ao ano são só um exemplo. Troque pelo rendimento de uma aplicação que você conhece (por exemplo, a poupança ou um investimento que acompanha a taxa Selic ou o CDI de hoje).</p>
+            <div id="guardarCorpo">
+              <div class="table-scroll" role="region" aria-labelledby="t-guardar" tabindex="0">
+                <table class="compare" id="guardarTable"></table>
+              </div>
+              <div class="mc-stats" id="guardarStats"></div>
+              <ul class="mc-notes" id="guardarNotes"></ul>
             </div>
           </div>
         </div>
@@ -751,7 +796,7 @@
         <div>
           <h3>Como funciona</h3>
           <ul>
-            <li><strong>Crupiê:</strong> assistente construído no Typebot. Um modelo de linguagem responde com base na base de conhecimento organizada pelo grupo e indica as fontes usadas.</li>
+            <li><strong>Crupiê:</strong> assistente construído no Typebot. Um modelo de linguagem responde só com a base de conhecimento organizada pelo grupo, a partir das fontes listadas abaixo, e cita a fonte (como o Banco Central ou a Lei 14.790/2023) quando usa um dado.</li>
             <li><strong>Simulador:</strong> todos os cálculos acontecem no seu próprio navegador. Os valores que você digita não são enviados nem guardados.</li>
           </ul>
         </div>
@@ -760,7 +805,39 @@
           <ul>
             <li>O simulador supõe que a probabilidade das odds, sem a margem da casa, se aproxima da chance real do evento. É uma premissa simplificadora: a chance verdadeira não é conhecida.</li>
             <li>A simulação supõe apostas independentes entre si, sempre com as mesmas odds.</li>
-            <li>O Crupiê pode errar ou deixar de encontrar uma resposta. Confira as fontes indicadas.</li>
+            <li>O Crupiê pode errar ou deixar de encontrar uma resposta. Confira as fontes listadas abaixo.</li>
+            <li>O quadro "Apostar ou guardar?" usa um rendimento digitado por você, como hipótese de comparação; não é recomendação de investimento.</li>
+          </ul>
+        </div>
+        <div class="fontes" id="fontes">
+          <h3>Fontes</h3>
+          <p>As respostas do Crupiê e os textos do site vêm destas fontes, reunidas e revisadas pelo grupo.</p>
+          <h4>Leis e órgãos públicos</h4>
+          <ul>
+            <li>Brasil. Lei nº 14.790, de 29 de dezembro de 2023 (apostas de quota fixa).</li>
+            <li>Brasil. Lei Complementar nº 224, de 26 de dezembro de 2025 (tributação das empresas de apostas).</li>
+            <li>Ministério da Fazenda, Secretaria de Prêmios e Apostas (SPA): regras para casas autorizadas e bloqueio de beneficiários do Bolsa Família e do BPC (2025).</li>
+            <li>Banco Central do Brasil. <a href="https://www.bcb.gov.br/conteudo/relatorioinflacao/EstudosEspeciais/EE119_Analise_tecnica_sobre_o_mercado_de_apostas_online_no_Brasil_e_o_perfil_dos_apostadores.pdf" target="_blank" rel="noopener">Análise técnica sobre o mercado de apostas online no Brasil e o perfil dos apostadores</a>. Estudo Especial nº 119, 2024.</li>
+            <li>Ministério da Saúde. Meu SUS Digital e campanha sobre apostas (2026); Centro de Valorização da Vida (CVV).</li>
+            <li>Organização Mundial da Saúde. CID-11, transtorno de jogo (6C50).</li>
+            <li>OECD. <a href="https://doi.org/10.1787/56003a32-en" target="_blank" rel="noopener">OECD/INFE 2023 International Survey of Adult Financial Literacy</a>, 2023.</li>
+            <li>Austrália, Department of the Prime Minister and Cabinet. <a href="https://www.pmc.gov.au/beta/projects/applying-behavioural-insights-online-wagering" target="_blank" rel="noopener">Applying behavioural insights to online wagering</a>.</li>
+          </ul>
+          <h4>Pesquisas e dados de mercado</h4>
+          <ul>
+            <li>Genial/Quaest. Pesquisa sobre apostas, abril de 2026 (<a href="https://g1.globo.com/economia/noticia/2026/04/17/quaest-apostas.ghtml" target="_blank" rel="noopener">g1</a>).</li>
+            <li>IPESPE para Febraban e CNF. <a href="https://cmsarquivos.febraban.org.br/Arquivos/documentos/PDF/RELAT%C3%93RIO%20PESQUISA%20QUANTITATIVA%20BETs_OUT2024_vf1.pdf" target="_blank" rel="noopener">Relatório de pesquisa quantitativa: BETs</a>, outubro de 2024.</li>
+            <li>Grand View Research. Sports Betting Market Report, 2026.</li>
+            <li>The Gambling Experts (2026); Track360 (2026); RG.org (2026): regras e números no Reino Unido e nos Estados Unidos.</li>
+            <li>Forrest, D.; McHale, I. G. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12116851/" target="_blank" rel="noopener">The Dependence of Online Gambling Businesses on High-Spending Customers</a>. Journal of Gambling Studies, 2024.</li>
+          </ul>
+          <h4>Economia comportamental e estatística</h4>
+          <ul>
+            <li>Kahneman, D.; Tversky, A. Prospect Theory: An Analysis of Decision under Risk. Econometrica, 1979.</li>
+            <li>Thaler, R. Toward a Positive Theory of Consumer Choice (1980); Mental Accounting and Consumer Choice (1985); Misbehaving (2015).</li>
+            <li>Thaler, R.; Sunstein, C. Nudge (2008).</li>
+            <li>Ariely, D. Predictably Irrational (2010).</li>
+            <li>Kahneman, D. Thinking, Fast and Slow (2011).</li>
           </ul>
         </div>
         <div class="ajuda">
@@ -864,6 +941,7 @@
     kelly: ['critério de Kelly', 'É uma fórmula da matemática que diz quanto apostar quando se tem vantagem sobre a casa. Aqui ela sempre diz "não aposte", porque quem tem a vantagem é a casa. Aparece só para comparar.'],
     montecarlo: ['simulação de Monte Carlo', 'O computador repete a sua sequência de apostas 300 vezes, como se 300 pessoas fizessem as mesmas apostas. Assim dá para ver o que pode acontecer com o seu dinheiro: quantos ganham, quantos perdem e quanto.'],
     bancamedia: ['banca média final', 'É quanto dinheiro sobrou, em média, no fim das apostas, olhando as 300 simulações.'],
+    oportunidade: ['custo de oportunidade', 'É o que você deixa de ter quando escolhe uma coisa em vez de outra. Aqui: o dinheiro que você colocaria nas apostas toda semana poderia estar guardado e rendendo juros.'],
     semdinheiro: ['ficar sem dinheiro para apostar', 'Parte das 300 simulações em que o dinheiro acabou antes do fim: ficou menor que o valor da aposta (no modo % da banca, menor que R$ 1).']
   };
   let dicaN = 0;
@@ -1018,11 +1096,11 @@
     });
   });
 
-  ['#banca', '#valorFixo', '#valorPct', '#nApostas'].forEach(sel => {
+  ['#banca', '#valorFixo', '#valorPct', '#nApostas', '#freqSemana', '#nMeses', '#taxaAno'].forEach(sel => {
     $(sel).addEventListener('input', recalcDigitando);
   });
   // Ao sair do campo, mostra o estado real na hora.
-  ['#banca', '#valorFixo', '#valorPct', '#nApostas', ...oddInputs.map(i => '#' + i.id)].forEach(sel => {
+  ['#banca', '#valorFixo', '#valorPct', '#nApostas', '#freqSemana', '#nMeses', '#taxaAno', ...oddInputs.map(i => '#' + i.id)].forEach(sel => {
     $(sel).addEventListener('change', () => { if(pausaTimer){ clearTimeout(pausaTimer); pausaTimer = null; recalc(); } });
   });
 
@@ -1090,8 +1168,19 @@
     const eN = (Number.isInteger(nApostas) && nApostas >= 5 && nApostas <= 150) ? null : 'Use um número inteiro entre 5 e 150.';
     marcarErro('#nApostas', 'erro-n', eN);
 
+    // apostar ou guardar: frequência, horizonte e rendimento (só afetam o quadro "Apostar ou guardar?")
+    const freq = lerNumero($('#freqSemana').value, 'inteiro');
+    const eFreq = (Number.isInteger(freq) && freq >= 1 && freq <= 50) ? null : 'Use um número inteiro entre 1 e 50.';
+    marcarErro('#freqSemana', 'erro-freq', eFreq);
+    const meses = lerNumero($('#nMeses').value, 'inteiro');
+    const eMeses = (Number.isInteger(meses) && meses >= 1 && meses <= 120) ? null : 'Use um número inteiro de meses entre 1 e 120 (10 anos).';
+    marcarErro('#nMeses', 'erro-meses', eMeses);
+    const taxa = lerNumero($('#taxaAno').value, 'pct');
+    const eTaxa = (taxa >= 0 && taxa <= 30) ? null : (temLetra('#taxaAno') ? 'Digite só o número, sem letras (exemplo: 10).' : 'Use um rendimento entre 0% e 30% ao ano.');
+    marcarErro('#taxaAno', 'erro-taxa', eTaxa);
+
     const ok = !eBanca && !eAposta && !eMercado;   // o nº de apostas só afeta a simulação
-    return { ok, nOk: !eN, incompleto, banca, V, pctValue, odds, idx, nApostas };
+    return { ok, nOk: !eN, gOk: !eFreq && !eMeses && !eTaxa, incompleto, banca, V, pctValue, odds, idx, nApostas, freq, meses, taxa };
   }
 
   // ---------- Modelo (fórmulas da calculadora original) ----------
@@ -1153,6 +1242,10 @@
     $('#mcStats').innerHTML = '';
     $('#mcNotes').innerHTML = '';
     $('#mcCompareTable').innerHTML = '';
+    $('#guardarTable').innerHTML = '';
+    $('#guardarStats').innerHTML = '';
+    $('#guardarNotes').innerHTML = '';
+    $('#guardarCorpo').hidden = true;
     lastModel = null;
     lastSim = null;
     $('#blocoKelly').hidden = true;
@@ -1260,6 +1353,13 @@
       $('#mcCorpo').hidden = true; $('#rerunMC').disabled = true; lastSim = null;
     } else completo = false;
 
+    if(e.gOk){
+      $('#guardarCorpo').hidden = false;
+      renderGuardar(m, e);
+    } else if(!silencioso){
+      $('#guardarCorpo').hidden = true;   // campo inválido: só este quadro some
+    } else completo = false;
+
     // Margem muito alta costuma ser odd digitada errado ou opção com/sem empate trocada.
     const am = $('#aviso-margem');
     am.hidden = !(m.margin > 0.20);
@@ -1267,6 +1367,88 @@
 
     anunciar(`Resultado atualizado. Valor esperado desta aposta: ${fmtMoney(m.user.EV)}, ${pillTexto.toLowerCase()}. Probabilidade usada: ${fmtPct(m.p)}. Margem da casa: ${fmtPct(m.margin)}.` + (lastSim ? ` Na simulação, banca média final: ${fmtMoney(lastSim.su.meanFinal)}.` : ''));
     return completo;
+  }
+
+  // ---------- Apostar ou guardar? (custo de oportunidade) ----------
+  // A mesma aposta (valor do passo 1, sempre o mesmo) feita "freq" vezes por semana, com dinheiro novo,
+  // durante "meses" meses, comparada a guardar o mesmo dinheiro toda semana com rendimento de "taxa"% ao ano.
+  // O número de vitórias segue uma distribuição binomial: as chances e as faixas abaixo são exatas (não sorteadas).
+  function binomialFaixas(N, p, vitoriasParaLucro){
+    // Retorna os percentis 5 e 95 do número de vitórias e a probabilidade de ter mais que "vitoriasParaLucro" vitórias.
+    const lq = Math.log(1 - p), lp = Math.log(p);
+    let logPmf = N * lq;                 // P(0 vitórias)
+    let acum = 0, p5 = null, p95 = null, probLucro = 0;
+    for(let k = 0; k <= N; k++){
+      if(k > 0) logPmf += Math.log((N - k + 1) / k) + lp - lq;
+      const pk = Math.exp(logPmf);
+      acum += pk;
+      if(k > vitoriasParaLucro) probLucro += pk;
+      if(p5 === null && acum >= 0.05) p5 = k;
+      if(p95 === null && acum >= 0.95) p95 = k;
+    }
+    return { p5: p5 ?? 0, p95: p95 ?? N, probLucro: Math.min(1, Math.max(0, probLucro)) };
+  }
+
+  function renderGuardar(m, e){
+    const aposta = m.user.stake;                    // valor de cada aposta (no modo %, o valor da primeira aposta)
+    const semanas = Math.round(e.meses * 52 / 12);
+    const N = e.freq * semanas;                     // total de apostas no período
+    const porSemana = aposta * e.freq;
+    const total = porSemana * semanas;              // dinheiro novo colocado nas apostas
+    const voltaMedia = total + N * m.user.EV;       // o que volta, em média
+    const perdaMedia = total - voltaMedia;
+    const i = e.taxa / 100;
+    const rSemana = Math.pow(1 + i, 1/52) - 1;
+    const guardado = rSemana > 0 ? porSemana * (Math.pow(1 + rSemana, semanas) - 1) / rSemana : total;
+    const juros = guardado - total;
+    const diferenca = guardado - voltaMedia;
+
+    // Faixa de resultados apostando (9 em cada 10 casos) e chance de terminar com lucro
+    const G = aposta * (m.O - 1);
+    const vitoriasParaLucro = Math.floor(N * aposta / (G + aposta) + 1e-9);   // precisa de MAIS vitórias que isso
+    const f = binomialFaixas(N, m.p, vitoriasParaLucro);
+    const voltaCom = k => k * (G + aposta);         // em cada vitória volta aposta x odd
+    const faixaBaixa = voltaCom(f.p5), faixaAlta = voltaCom(f.p95);
+
+    const horizonte = e.meses % 12 === 0 ? (e.meses/12 === 1 ? '1 ano' : (e.meses/12) + ' anos') : (e.meses === 1 ? '1 mês' : e.meses + ' meses');
+    const pctTexto = v => (v > 0 && v < 0.005) ? 'menos de 1%' : (v < 1 && v > 0.995) ? 'mais de 99%' : fmtPct(v, 0);
+
+    $('#guardarTable').innerHTML = `
+      <caption class="sr-only">Apostar comparado a guardar o mesmo dinheiro por ${horizonte}</caption>
+      <thead>
+        <tr><th scope="col">Cenário</th><th scope="col">Você coloca</th><th scope="col">Fica com você no fim</th><th scope="col">Diferença</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Apostar (${N.toLocaleString('pt-BR')} apostas)</th>
+          <td>${fmtMoney(total)}</td>
+          <td>${fmtMoney(voltaMedia)} <span class="sr-only">em média</span></td>
+          <td class="${signClass(-perdaMedia, 0.005)}">${fmtMoney(-perdaMedia)}</td>
+        </tr>
+        <tr>
+          <th scope="row">Guardar a ${fmtNum(e.taxa, e.taxa % 1 ? 1 : 0)}% ao ano</th>
+          <td>${fmtMoney(total)}</td>
+          <td>${fmtMoney(guardado)}</td>
+          <td class="${signClass(juros, 0.005)}">${fmtMoney(juros)}</td>
+        </tr>
+      </tbody>
+    `;
+    rotularTabela($('#guardarTable'));
+
+    $('#guardarStats').innerHTML = `
+      <div class="stat"><div class="k">Guardar deixa você à frente, em média, em</div><div class="v ${signClass(diferenca, 0.005)}">${fmtMoney(diferenca)}</div></div>
+      <div class="stat"><div class="k">Chance de terminar com lucro apostando</div><div class="v">${pctTexto(f.probLucro)}</div></div>
+      <div class="stat"><div class="k">Apostando, em 9 de cada 10 casos volta entre</div><div class="v faixa-v"><span>${fmtMoney(faixaBaixa)}</span> e <span>${fmtMoney(faixaAlta)}</span></div></div>
+    `;
+
+    const notas = [
+      `São ${fmtMoney(porSemana)} por semana (${e.freq} ${e.freq === 1 ? 'aposta' : 'apostas'} de ${fmtMoney(aposta)}) durante ${horizonte} (${semanas} semanas).`,
+      `"Fica com você no fim", apostando, é a média: cada aposta perde em média ${fmtMoney(-m.user.EV)} por causa da margem da casa (${fmtPct(m.margin)}). Com sorte ou azar o resultado muda; a faixa acima mostra até onde.`,
+      'Nesta conta o prêmio não é apostado de novo: cada semana entra dinheiro novo. Quem reaposta o que ganhou costuma perder ainda mais, porque a margem da casa é cobrada de novo a cada aposta.',
+      'O rendimento é uma hipótese para comparação, não uma recomendação de investimento. Impostos e taxas da aplicação não estão na conta.'
+    ];
+    if(m.stakeMode === 'pct') notas.unshift(`No modo % da banca, este quadro usa como valor de cada aposta ${fmtMoney(aposta)} (${fmtNum(m.pctValue, m.pctValue % 1 ? 1 : 0)}% da banca atual).`);
+    $('#guardarNotes').innerHTML = notas.map(t => `<li>${t}</li>`).join('');
   }
 
   // ---------- Monte Carlo ----------
